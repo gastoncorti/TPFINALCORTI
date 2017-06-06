@@ -32,6 +32,7 @@ public class ServicioViajero {
                 nueva.setAlojamientoDisp(true);
             } else if (aloj == 'N' || aloj == 'n') {
                 nueva.setAlojamientoDisp(false);
+                correcto = true;
             }
         }
         if (diccionario.insertar(nueva.getNombre(), nueva) && conexiones.insertarVertice(nueva.getNombre())) {
@@ -178,11 +179,11 @@ public class ServicioViajero {
 
     public static void menu() {
         final String MENU = "\n-SERVICIOS DEL VIAJERO- v1.0\n"
-                + " 1 - Alta Ciudad.\n"
-                + " 2 - Baja Ciudad.\n"
+                + "\u2713 1 - Alta Ciudad.\n"
+                + "\u2713 2 - Baja Ciudad.\n"
                 + " 3 - Alta Ruta.\n"
                 + " 4 - Baja Ruta.\n"
-                + " 5 - Información Ciudad.\n"
+                + "\u2713 5 - Información Ciudad.\n"
                 + " 6 - Listar rango de ciudades.\n"
                 + " 7 - Camino más corto.\n"
                 + " 8 - Camino más corto que x kilometros.\n"
@@ -197,7 +198,7 @@ public class ServicioViajero {
     }
 
     public void cargaTesting() {
-        diccionario.insertar("A", new Ciudad("A", "A", 1, false));
+        /*diccionario.insertar("A", new Ciudad("A", "A", 1, false));
         diccionario.insertar("B", new Ciudad("B", "A", 1, false));
         diccionario.insertar("C", new Ciudad("C", "A", 1, false));
         diccionario.insertar("D", new Ciudad("D", "A", 1, false));
@@ -212,9 +213,9 @@ public class ServicioViajero {
         conexiones.insertarArco("B", "A", 4);
         conexiones.insertarArco("B", "C", 3);
         conexiones.insertarArco("D", "B", 2);
-        conexiones.insertarArco("E", "C", 2);
+        conexiones.insertarArco("E", "C", 2);*/
         
-        /*diccionario.insertar("CONCEPCION", new Ciudad("CONCEPCION", "TUCUMAN", 46194, false));
+        diccionario.insertar("CONCEPCION", new Ciudad("CONCEPCION", "TUCUMAN", 46194, false));
         conexiones.insertarVertice("CONCEPCION");
         diccionario.insertar("CORDOBA", new Ciudad("CORDOBA", "CORDOBA", 157010, true));
         conexiones.insertarVertice("CORDOBA");
@@ -286,6 +287,6 @@ public class ServicioViajero {
         conexiones.insertarArco("PARANA", "CORDOBA", 323);
 
         conexiones.insertarArco("USHUAIA", "AZUL", 527);
-        conexiones.insertarArco("USHUAIA", "MENDOZA", 184);*/
+        conexiones.insertarArco("USHUAIA", "MENDOZA", 184);
     }
 }
