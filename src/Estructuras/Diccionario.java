@@ -76,9 +76,6 @@ public class Diccionario {
                 cantHijos = hijos(nodoElim);
                 switch (cantHijos) {
                     case "AMBOS":
-                        if (padre == null) {
-                            raiz = null;
-                        } else {
                             //buscar sustituto hoja menor en subarbol derecho
                             NodoDic sustituto = buscarSustituto(nodoElim.getDer());
                             claveAux = sustituto.getClave();
@@ -88,7 +85,6 @@ public class Diccionario {
                             nodoElim.setCiudad(ciudadAux);
                             nodoElim.setAltura(alturaNodo(nodoElim));
                             //padre.setAltura(alturaNodo(padre));
-                        }
                         break;
                     case "IZQ":
                         if (padre == null) {
