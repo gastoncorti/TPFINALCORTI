@@ -101,21 +101,24 @@ public class Grafo {
         return seElimino;
     }
 
-    public boolean eliminarAdyacente(String origen, String destino) {
+   public boolean eliminarAdyacente(String origen, String destino) {
         boolean seElimino = false;
-        NodoVert auxVert = ubicarVertice(origen);
-        NodoAdy auxAdy = auxVert.getPrimerAdy();
-        if (auxVert != null && auxAdy != null) { //si existe el origen y tiene adyacentes
-            if (auxAdy.getVertice().getElem().equals(destino)) {//si es el prrimero
-                auxAdy.setSigAdyacente(auxAdy.getSigAdyacente());
-                seElimino = true;
-            } else { //es algun otro elemento en la lista de adyacentes de auxVert
-                while (auxAdy.getSigAdyacente() != null && !seElimino) {
-                    if (auxAdy.getSigAdyacente().getVertice().getElem().equals(destino)) {//si es este eliminar
-                        auxAdy.setSigAdyacente(auxAdy.getSigAdyacente().getSigAdyacente());
-                        seElimino = true;
-                    } else {//sigo buscando
-                        auxAdy = auxAdy.getSigAdyacente();
+        NodoVer auxVer = ubicarVertice(origen);
+        if (auxVer != null) {
+            NodoAdy auxAdy = auxVer.getPrimerAdy();
+            if (auxAdy != null) {
+                if (auxAdy.getVertice().getElemento().equals(destino)) {
+                    auxVer.setPrimerAdy(auxAdy.getSigAdy());
+                    seElimino = true;
+                } else {
+                    while (auxAdy.getSigAdy() != null && !seElimino) {
+                        if (auxAdy.getSigAdy().getVertice().getElemento().equals(destino)) {
+                            auxAdy.setSigAdy(auxAdy.getSigAdy().getSigAdy());
+                            seElimino = true;
+                        } else {
+                            auxAdy = auxAdy.getSigAdy();
+                        }
+
                     }
                 }
             }
