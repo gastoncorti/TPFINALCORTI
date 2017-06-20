@@ -166,11 +166,11 @@ public class ServicioViajero {
     }
 
     public void listarCiudadesAlfab() {
-        diccionario.listar();
+        System.out.println(diccionario.listarCiudadesAlfabeticamente());
     }
 
     public void mostrarDic() {
-        diccionario.mostrarDic();
+        System.out.println(diccionario.toString());
     }
 
     public void mostrarGrafo() {

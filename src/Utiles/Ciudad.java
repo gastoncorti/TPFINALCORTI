@@ -52,7 +52,7 @@ public class Ciudad {
 
     @Override
     public String toString() {
-        return "C: " + nombre + " P: " + provincia + " H: " + habitantes + " Alojamiento: " + ((alojamientoDisp) ? "Si" : "No");
+        return "Ciudad: " + nombre + " Prov: " + provincia + " Hab: " + habitantes + " Alojamiento: " + ((alojamientoDisp) ? "Si" : "No");
     }
 }
 
