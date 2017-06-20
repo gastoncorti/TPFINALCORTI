@@ -103,6 +103,30 @@ public class Grafo {
 
     public boolean eliminarAdyacente(String origen, String destino) {
         boolean seElimino = false;
+        NodoVert auxVer = ubicarVertice(origen);
+        if (auxVer != null) {
+            NodoAdy auxAdy = auxVer.getPrimerAdy();
+            if (auxAdy != null) {
+                if (auxAdy.getVertice().getElem().equals(destino)) {
+                    auxVer.setPrimerAdy(auxAdy.getSigAdyacente());
+                    seElimino = true;
+                } else {
+                    while (auxAdy.getSigAdyacente() != null && !seElimino) {
+                        if (auxAdy.getSigAdyacente().getVertice().getElem().equals(destino)) {
+                            auxAdy.setSigAdyacente(auxAdy.getSigAdyacente().getSigAdyacente());
+                            seElimino = true;
+                        } else {
+                            auxAdy = auxAdy.getSigAdyacente();
+                        }
+                    }
+                }
+            }
+        }
+        return seElimino;
+    }
+
+    /*public boolean eliminarAdyacente(String origen, String destino) {
+        boolean seElimino = false;
         NodoVert auxVert = ubicarVertice(origen);
         NodoAdy auxAdy = auxVert.getPrimerAdy();
         if (auxVert != null && auxAdy != null) { //si existe el origen y tiene adyacentes
@@ -121,8 +145,7 @@ public class Grafo {
             }
         }
         return seElimino;
-    }
-
+    }*/
     public ListaStr listarProfundidad() {
         ListaStr visitados = new ListaStr();
         NodoVert aux = this.inicio;
@@ -394,45 +417,44 @@ public class Grafo {
     public double intentoDisk(String origen, String destino) {
         NodoVert origenAux = ubicarVertice(origen);
         NodoVert destinoAux = ubicarVertice(destino);
-        
 
         return 0.0;
     }
-    
-     public void dijkstra(String origen, String destino) {
+
+    public void dijkstra(String origen, String destino) {
         ListaStr lista = new ListaStr();
         NodoVert auxVert = this.inicio;
         int cantVert = cantVertices();
-        
+
         LinkedList<Double> dist = new LinkedList<Double>();
         NodoVert[] prev = new NodoVert[cantVert];
         NodoVert[] vertices = new NodoVert[cantVert];
         String vertActual = "";
-        
+
         for (int i = 0; i < cantVert; i++) {
             dist.add(Double.MAX_VALUE);
             prev[i] = null;
-           
+
             lista.insertar(auxVert.getElem());
             vertices[i] = auxVert;
-            
+
             auxVert = auxVert.getSigVertice();
         }
-        
-        dist.set(dist.size()-1, 0D);
-        
+
+        dist.set(dist.size() - 1, 0D);
+
         int pos;
         double alt;
         NodoAdy auxAdy;
-        
+
         while (!lista.esVacia()) {
             pos = leastDistance(dist);
             //auxVert = ubicarVertice(lista.recuperar(pos));
             auxVert = vertices[pos];
-            lista.eliminar(pos+1);
+            lista.eliminar(pos + 1);
             auxAdy = auxVert.getPrimerAdy();
-            
-            while(auxAdy != null) {
+
+            while (auxAdy != null) {
                 alt = dist.get(pos) + peso(auxVert, auxAdy);
                 if (alt < dist.get(pos)) {
                     dist.set(pos, alt);
@@ -442,92 +464,105 @@ public class Grafo {
             }
         }
         //loop de los vertices
-            //loop de los ady
- 
+        //loop de los ady
+
     }
-     private int leastDistance(LinkedList<Double> dist) {
-         double menor;
-         int p = 0;
-         
-         for (int i = 0; i < dist.size() - 1; i++) {
-             menor = dist.get(i);
-             if(menor > dist.get(i+1)) {
-                 menor = dist.get(i+1);
-                 p = i+1;
-             } 
-         }
-         return p;
-     }
-     /*back up listalinked
-          public void dijkstra(String origen, String destino) {
-        ListaStr lista = new ListaStr();
-        NodoVert auxVert = this.inicio;
-        int cantVert = cantVertices();
-        
-        double[] dist = new double[cantVert];
-        NodoVert[] prev = new NodoVert[cantVert];
-        NodoVert[] vertices = new NodoVert[cantVert];
-        String vertActual = "";
-        
-        for (int i = 0; i < cantVert; i++) {
-            dist[i] = Double.MAX_VALUE;
-            prev[i] = null;
-           
-            lista.insertar(auxVert.getElem());
-            vertices[i] = auxVert;
-            
-            auxVert = auxVert.getSigVertice();
+
+    private int leastDistance(LinkedList<Double> dist) {
+        double menor;
+        int p = 0;
+
+        for (int i = 0; i < dist.size() - 1; i++) {
+            menor = dist.get(i);
+            if (menor > dist.get(i + 1)) {
+                menor = dist.get(i + 1);
+                p = i + 1;
+            }
         }
-        
-        dist[cantVert-1] = 0;
-        int pos;
-        double alt;
-        NodoAdy auxAdy;
-        
-        while (!lista.esVacia()) {
-            pos = posArreglo(dist);
-            //auxVert = ubicarVertice(lista.recuperar(pos));
-            auxVert = vertices[pos];
-            lista.eliminar(pos+1);
-            auxAdy = auxVert.getPrimerAdy();
-            
-            while(auxAdy != null) {
-                alt = dist[pos] + peso(auxVert, auxAdy);
-                if (alt < dist[pos]) {
-                    dist[pos] = alt;
-                    prev[pos] = auxVert;
-                }
+        return p;
+    }
+
+    private double peso(NodoVert a, NodoAdy b) {
+        NodoAdy auxAdy = a.getPrimerAdy();
+        double peso = -1;
+        while (auxAdy != null && peso == -1) {
+            if (b.getVertice().getElem().equals(auxAdy.getVertice().getElem())) {
+                peso = auxAdy.getEtiqueta();
+            } else {
                 auxAdy = auxAdy.getSigAdyacente();
             }
         }
-        //loop de los vertices
-            //loop de los ady
- 
+
+        return peso;
     }
-     */
-     private double peso(NodoVert a, NodoAdy b) {
-         NodoAdy auxAdy = a.getPrimerAdy();
-         double peso = -1;
-         while(auxAdy != null && peso == -1) {
-             if(b.getVertice().getElem().equals(auxAdy.getVertice().getElem())) {
-                 peso = auxAdy.getEtiqueta();
-             } else {
-                 auxAdy = auxAdy.getSigAdyacente();
-             }
-         }
-         
-         return peso;
-     }
-     private int posArreglo(double[] arr) {
-         double menor;
-         int p = -1;
-         for (int i = 0; i < arr.length - 1; i++) {
-             menor = arr[i];
-             if(menor > arr[i+1]) {
-                 menor = arr[i+1];
-                 p = i+1;
-             } 
-         }
-         return p;
-     }
+
+    private int posArreglo(double[] arr) {
+        double menor;
+        int p = -1;
+        for (int i = 0; i < arr.length - 1; i++) {
+            menor = arr[i];
+            if (menor > arr[i + 1]) {
+                menor = arr[i + 1];
+                p = i + 1;
+            }
+        }
+        return p;
+    }
+
+   /* public class Dijkstra {
+
+        // Dijkstra's algorithm to find shortest path from s to all other nodes
+        public int[] dijkstra(WeightedGraph G, int s) {
+
+            final int[] dist = new int[G.size()];  // shortest known distance from "s"
+            final int[] pred = new int[G.size()];  // preceeding node in path
+            final boolean[] visited = new boolean[G.size()]; // all false initially
+
+            for (int i = 0; i < dist.length; i++) {
+                dist[i] = Integer.MAX_VALUE;
+            }
+            dist[s] = 0;
+
+            for (int i = 0; i < dist.length; i++) {
+                final int next = minVertex(dist, visited);
+                visited[next] = true;
+
+                // The shortest path to next is dist[next] and via pred[next].
+                final int[] n = G.neighbors(next);
+                for (int j = 0; j < n.length; j++) {
+                    final int v = n[j];
+                    final int d = dist[next] + G.getWeight(next, v);
+                    if (dist[v] > d) {
+                        dist[v] = d;
+                        pred[v] = next;
+                    }
+                }
+            }
+            return pred;  // (ignore pred[s]==0!)
+        }
+
+        private int minVertex(int[] dist, boolean[] v) {
+            int x = Integer.MAX_VALUE;
+            int y = -1;   // graph not connected, or no unvisited vertices
+            for (int i = 0; i < dist.length; i++) {
+                if (!v[i] && dist[i] < x) {
+                    y = i;
+                    x = dist[i];
+                }
+            }
+            return y;
+        }
+
+        public void printPath(WeightedGraph G, int[] pred, int s, int e) {
+            final java.util.ArrayList path = new java.util.ArrayList();
+            int x = e;
+            while (x != s) {
+                path.add(0, G.getLabel(x));
+                x = pred[x];
+            }
+            path.add(0, G.getLabel(s));
+            System.out.println(path);
+        }
+
+    }*/
 }

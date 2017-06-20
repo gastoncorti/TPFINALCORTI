@@ -76,15 +76,15 @@ public class Diccionario {
                 cantHijos = hijos(nodoElim);
                 switch (cantHijos) {
                     case "AMBOS":
-                            //buscar sustituto hoja menor en subarbol derecho
-                            NodoDic sustituto = buscarSustituto(nodoElim.getDer());
-                            claveAux = sustituto.getClave();
-                            ciudadAux = sustituto.getCiudad();
-                            eliminarAux(sustituto.getClave(), raiz, null);
-                            nodoElim.setClave(claveAux);
-                            nodoElim.setCiudad(ciudadAux);
-                            nodoElim.setAltura(alturaNodo(nodoElim));
-                            //padre.setAltura(alturaNodo(padre));
+                        //buscar sustituto hoja menor en subarbol derecho
+                        NodoDic sustituto = buscarSustituto(nodoElim.getDer());
+                        claveAux = sustituto.getClave();
+                        ciudadAux = sustituto.getCiudad();
+                        eliminarAux(sustituto.getClave(), raiz, null);
+                        nodoElim.setClave(claveAux);
+                        nodoElim.setCiudad(ciudadAux);
+                        nodoElim.setAltura(alturaNodo(nodoElim));
+                        //padre.setAltura(alturaNodo(padre));
                         break;
                     case "IZQ":
                         if (padre == null) {
@@ -113,11 +113,16 @@ public class Diccionario {
                         }
                         break;
                     default:
-                        if (padre.getClave().compareTo(nodoElim.getClave()) > 0) {
-                            padre.setIzq(null);
+                        if (padre != null) {
+                            if (padre.getClave().compareTo(nodoElim.getClave()) > 0) {
+                                padre.setIzq(null);
+                            } else {
+                                padre.setDer(null);
+                            }
                         } else {
-                            padre.setDer(null);
+                            raiz = null;
                         }
+
                         break;
                 }
                 if (padre != null) {
@@ -277,7 +282,7 @@ public class Diccionario {
             }
             alt = (altI >= altD) ? altI : altD;
         } else {
-            alt = 0;
+            alt = -1;
         }
         return alt;
     }
@@ -290,20 +295,24 @@ public class Diccionario {
         raiz = null;
     }
 
-    public void listar() {
+    public String listarCiudadesAlfabeticamente() {
+        String res = "No existen ciudades!";
         if (raiz != null) {
             listarAux(raiz);
-        } else {
-            System.out.println("Sin Elem");
         }
+
+        return res;
     }
 
-    private void listarAux(NodoDic nActual) {
+    private String listarAux(NodoDic nActual) {
+        String res = "";
         if (nActual != null) {
-            listarAux(nActual.getIzq());
-            System.out.print(nActual.getCiudad().getNombre() + ",");
-            listarAux(nActual.getDer());
+            res += listarAux(nActual.getIzq());
+            res += nActual.getCiudad().getNombre() + ",";
+            res += listarAux(nActual.getDer());
         }
+
+        return res;
     }
 
     public void listarAltura() {
@@ -373,26 +382,30 @@ public class Diccionario {
         }
     }
 
-    public void mostrarDic() {
+    @Override
+    public String toString() {
+        String res = "Vacio!";
         if (raiz != null) {
-            mostrarDicAux(raiz);
-        } else {
-            System.out.println("Vacio!");
+            res = toStringAux(raiz);
         }
+
+        return res;
     }
 
-    private void mostrarDicAux(NodoDic raizActual) {
+    private String toStringAux(NodoDic raizActual) {
+        String res = "";
         if (raizActual != null) {
-            System.out.print("Padre: " + raizActual.getClave());
+            res += "Padre: " + raizActual.getClave();
             if (raizActual.getIzq() != null) {
-                System.out.print("\n HI: " + raizActual.getIzq().getClave());
+                res += "\n HI: " + raizActual.getIzq().getClave();
             }
             if (raizActual.getDer() != null) {
-                System.out.print("\n HD: " + raizActual.getDer().getClave());
+                res += "\n HD: " + raizActual.getDer().getClave();
             }
-            System.out.println("\n-----------------------------------");
-            mostrarDicAux(raizActual.getIzq());
-            mostrarDicAux(raizActual.getDer());
+            res += "\n-----------------------------------";
+            toStringAux(raizActual.getIzq());
+            toStringAux(raizActual.getDer());
         }
+        return res;
     }
 }
