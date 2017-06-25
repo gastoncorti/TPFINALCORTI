@@ -123,7 +123,7 @@ public class ServicioViajero {
         origen = TecladoIn.readLine().toUpperCase();
         System.out.println("Destino: ");
         destino = TecladoIn.readLine().toUpperCase();
-        ListaStr camino = conexiones.caminoMasCorto(origen, destino);
+        ListaStr camino = conexiones.caminoMenorCantCiudades(origen, destino);
         System.out.println(camino.toString());
     }
 
@@ -160,7 +160,7 @@ public class ServicioViajero {
         origen = TecladoIn.readLine().toUpperCase();
         System.out.println("Ingrese destino: ");
         destino = TecladoIn.readLine().toUpperCase();
-        ListaStr conAloj = conexiones.existeCaminoAlojamiento(origen, destino, diccionario);
+        ListaStr conAloj = conexiones.caminoConAlojamiento(origen, destino, diccionario);
         System.out.println(conAloj.toString());
 
     }
@@ -188,7 +188,7 @@ public class ServicioViajero {
                 + " 7 - Camino más corto.\n"
                 + " 8 - Camino más corto que x kilometros.\n"
                 + "\u2713 9 - Camino que pasa por la menor cantidad de ciudades.\n"
-                + " 10 - Camino a traves de ciudades con alojamiento.\n"
+                + "\u2713 10 - Camino a traves de ciudades con alojamiento.\n"
                 + "\u2713 11 - Listar ciudades por orden alfabetico.\n"
                 + "\u2713 12 - Mostrar diccionario.\n"
                 + "\u2713 13 - Mostrar grafo.\n"

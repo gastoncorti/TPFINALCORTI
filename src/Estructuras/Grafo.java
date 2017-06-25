@@ -126,27 +126,6 @@ public class Grafo {
         return seElimino;
     }
 
-    /*public boolean eliminarAdyacente(String origen, String destino) {
-        boolean seElimino = false;
-        NodoVert auxVert = ubicarVertice(origen);
-        NodoAdy auxAdy = auxVert.getPrimerAdy();
-        if (auxVert != null && auxAdy != null) { //si existe el origen y tiene adyacentes
-            if (auxAdy.getVertice().getElem().equals(destino)) {//si es el prrimero
-                auxAdy.setSigAdyacente(auxAdy.getSigAdyacente());
-                seElimino = true;
-            } else { //es algun otro elemento en la lista de adyacentes de auxVert
-                while (auxAdy.getSigAdyacente() != null && !seElimino) {
-                    if (auxAdy.getSigAdyacente().getVertice().getElem().equals(destino)) {//si es este eliminar
-                        auxAdy.setSigAdyacente(auxAdy.getSigAdyacente().getSigAdyacente());
-                        seElimino = true;
-                    } else {//sigo buscando
-                        auxAdy = auxAdy.getSigAdyacente();
-                    }
-                }
-            }
-        }
-        return seElimino;
-    }*/
     public ListaStr listarProfundidad() {
         ListaStr visitados = new ListaStr();
         NodoVert aux = this.inicio;
@@ -235,18 +214,18 @@ public class Grafo {
         }
     }
 
-    public ListaStr caminoMasCorto(String partida, String llegada) {
+    public ListaStr caminoMenorCantCiudades(String partida, String llegada) {
         ListaStr visitados = new ListaStr();
         ListaStr menor = new ListaStr();
         NodoVert vPartida = ubicarVertice(partida);
         NodoVert vLlegada = ubicarVertice(llegada);
         if (vPartida != null && vLlegada != null) {
-            menor = caminoMasCortoAux(vPartida, visitados, menor, llegada);
+            menor = caminoMenorCantCiudadesAux(vPartida, visitados, menor, llegada);
         }
         return menor;
     }
 
-    private ListaStr caminoMasCortoAux(NodoVert partida, ListaStr visitados, ListaStr menor, String llegada) {
+    private ListaStr caminoMenorCantCiudadesAux(NodoVert partida, ListaStr visitados, ListaStr menor, String llegada) {
         NodoAdy aux;
         ListaStr menorAux;
         if (!visitados.pertenece(partida.getElem())) {
@@ -262,7 +241,7 @@ public class Grafo {
             } else {
                 aux = partida.getPrimerAdy();
                 while (aux != null) {
-                    menorAux = caminoMasCortoAux(aux.getVertice(), visitados, menor, llegada);
+                    menorAux = caminoMenorCantCiudadesAux(aux.getVertice(), visitados, menor, llegada);
                     if (!menorAux.esVacia()) {
                         if (!menor.esVacia()) {
                             if (menorAux.longitud() < menor.longitud()) {
@@ -322,7 +301,56 @@ public class Grafo {
         return minimoHastaAhora;
     }
 
-    public ListaStr existeCaminoAlojamiento(String partida, String llegada, Diccionario dicc) {
+    public ListaStr caminoConAlojamiento(String partida, String llegada, Diccionario dicc) {
+        ListaStr visitados = new ListaStr();
+        ListaStr menor = new ListaStr();
+        NodoVert vPartida = ubicarVertice(partida);
+        NodoVert vLlegada = ubicarVertice(llegada);
+        if (vPartida != null && vLlegada != null) {
+            menor = caminoConAlojamientoAux(vPartida, visitados, menor, llegada, dicc);
+        }
+        return menor;
+    }
+
+    private ListaStr caminoConAlojamientoAux(NodoVert partida, ListaStr visitados, ListaStr menor, String llegada, Diccionario dicc) {
+        NodoAdy auxAdy;
+        ListaStr menorAux;
+        boolean alojActual = false;
+        if (!visitados.pertenece(partida.getElem())) {
+            visitados.insertar(partida.getElem(), visitados.longitud() + 1);
+            if (partida.getElem().equals(llegada)) {
+                if (menor.esVacia()) {
+                    menor = visitados.clonar();
+                } else {
+                    if (visitados.longitud() < menor.longitud()) {
+                        menor = visitados.clonar();
+                    }
+                }
+            } else {
+                auxAdy = partida.getPrimerAdy();
+                while (auxAdy != null) {
+                    alojActual = dicc.recuperarElemento(auxAdy.getVertice().getElem()).isAlojamientoDisp();
+                    if (alojActual || auxAdy.getVertice().getElem().equals(llegada)) {
+                        menorAux = caminoConAlojamientoAux(auxAdy.getVertice(), visitados, menor, llegada, dicc);
+                        if (!menorAux.esVacia()) {
+                            if (!menor.esVacia()) {
+                                if (menorAux.longitud() < menor.longitud()) {
+                                    menor = menorAux.clonar();
+                                }
+                            } else {
+                                menor = menorAux.clonar();
+                            }
+                        }
+                    }
+                    auxAdy = auxAdy.getSigAdyacente();
+                }
+            }
+            visitados.eliminar(visitados.longitud());
+        }
+        return menor;
+    }
+
+    /*public ListaStr existeCaminoAlojamiento(String partida, String llegada, Diccionario dicc) {
         NodoVert vertPartida = ubicarVertice(partida);
         NodoVert vertLlegada = ubicarVertice(llegada);
         ListaStr visitados = new ListaStr();
@@ -358,8 +386,7 @@ public class Grafo {
             }
         }
         return res;
-    }
-
+    }*/
     @Override
     public String toString() {
         String cad = "";

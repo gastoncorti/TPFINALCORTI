@@ -14,8 +14,9 @@ public class Main {
         boolean corriendo = true;
         //Pruebas();
         ServicioViajero sv = new ServicioViajero();
-        sv.cargaTesting();
-
+        //sv.cargaTesting();
+        sv.cargaInicial();
+        
         while (corriendo) {
             
             ServicioViajero.menu();
@@ -109,7 +110,7 @@ public class Main {
         g.insertarArco("C", "E", 3);
         g.insertarArco("D", "E", 5);
 
-        ListaStr list = g.caminoMasCorto("A", "E");
+        ListaStr list = g.caminoMenorCantCiudades("A", "E");
 
         System.out.println(list.toString());
 
