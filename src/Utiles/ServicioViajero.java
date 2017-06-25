@@ -181,10 +181,10 @@ public class ServicioViajero {
         final String MENU = "\n-SERVICIOS DEL VIAJERO- v1.0\n"
                 + "\u2713 1 - Alta Ciudad.\n"
                 + "\u2713 2 - Baja Ciudad.\n"
-                + " 3 - Alta Ruta.\n"
-                + " 4 - Baja Ruta.\n"
+                + "\u2713 3 - Alta Ruta.\n"
+                + "\u2713 4 - Baja Ruta.\n"
                 + "\u2713 5 - Información Ciudad.\n"
-                + " 6 - Listar rango de ciudades.\n"
+                + "\u2713 6 - Listar rango de ciudades.\n"
                 + " 7 - Camino más corto.\n"
                 + " 8 - Camino más corto que x kilometros.\n"
                 + "\u2713 9 - Camino que pasa por la menor cantidad de ciudades.\n"
@@ -197,23 +197,7 @@ public class ServicioViajero {
         System.out.println(MENU);
     }
 
-    public void cargaTesting() {
-        /*diccionario.insertar("A", new Ciudad("A", "A", 1, false));
-        diccionario.insertar("B", new Ciudad("B", "A", 1, false));
-        diccionario.insertar("C", new Ciudad("C", "A", 1, false));
-        diccionario.insertar("D", new Ciudad("D", "A", 1, false));
-        diccionario.insertar("E", new Ciudad("E", "A", 1, false));
-        conexiones.insertarVertice("A");
-        conexiones.insertarVertice("B");
-        conexiones.insertarVertice("C");
-        conexiones.insertarVertice("D");
-        conexiones.insertarVertice("E");
-        conexiones.insertarArco("A", "C", 3);
-        conexiones.insertarArco("C", "D", 1);
-        conexiones.insertarArco("B", "A", 4);
-        conexiones.insertarArco("B", "C", 3);
-        conexiones.insertarArco("D", "B", 2);
-        conexiones.insertarArco("E", "C", 2);*/
+    public void cargaInicial() {
         
         diccionario.insertar("CONCEPCION", new Ciudad("CONCEPCION", "TUCUMAN", 46194, false));
         conexiones.insertarVertice("CONCEPCION");
@@ -288,5 +272,30 @@ public class ServicioViajero {
 
         conexiones.insertarArco("USHUAIA", "AZUL", 527);
         conexiones.insertarArco("USHUAIA", "MENDOZA", 184);
+    }
+    
+    public void cargaTesting() {
+        diccionario.insertar("D", new Ciudad("D","D", 10, true));
+        diccionario.insertar("E", new Ciudad("E","E", 10, false));
+        diccionario.insertar("C", new Ciudad("C","C", 10, false));
+        diccionario.insertar("A", new Ciudad("A","A", 10, true));
+        diccionario.insertar("B", new Ciudad("B","B", 10, true));
+        
+        conexiones.insertarVertice("C");
+        conexiones.insertarVertice("E");
+        conexiones.insertarVertice("A");
+        conexiones.insertarVertice("D");
+        conexiones.insertarVertice("B");
+        
+        conexiones.insertarArco("C", "D", 5);
+        
+        conexiones.insertarArco("E", "C", 5);
+        
+        conexiones.insertarArco("B", "D", 5);
+        
+        conexiones.insertarArco("A", "D", 30);
+        conexiones.insertarArco("A", "B", 10);
+        conexiones.insertarArco("A", "C", 5);
+        conexiones.insertarArco("A", "E", 10);
     }
 }

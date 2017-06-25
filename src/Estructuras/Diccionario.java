@@ -298,7 +298,7 @@ public class Diccionario {
     public String listarCiudadesAlfabeticamente() {
         String res = "No existen ciudades!";
         if (raiz != null) {
-            listarAux(raiz);
+            res = listarAux(raiz);
         }
 
         return res;
@@ -402,9 +402,9 @@ public class Diccionario {
             if (raizActual.getDer() != null) {
                 res += "\n HD: " + raizActual.getDer().getClave();
             }
-            res += "\n-----------------------------------";
-            toStringAux(raizActual.getIzq());
-            toStringAux(raizActual.getDer());
+            res += "\n-----------------------------------\n";
+            res += toStringAux(raizActual.getIzq());
+            res += toStringAux(raizActual.getDer());
         }
         return res;
     }

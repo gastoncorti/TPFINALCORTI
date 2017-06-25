@@ -53,25 +53,26 @@ public class Grafo {
     public boolean eliminarVertice(String elem) {
         boolean seElimino = false;
         NodoVert anterior = inicio;
-        if (anterior.getElem().equals(elem)) {//Si es el inicial
-            inicio = inicio.getSigVertice();
-            seElimino = true;
-        } else {//no es el inicial loopeo por los vertices
-            while (anterior.getSigVertice() != null && !seElimino) {
-                if (anterior.getSigVertice().getElem().equals(elem)) {
-                    //Si encontre el anterior borro el elemento.
-                    anterior.setSigVertice(anterior.getSigVertice().getSigVertice());
-                    seElimino = true;
-                } else {
-                    //sigo buscando
-                    anterior = anterior.getSigVertice();
+        if (anterior != null) { //Si no esta vacio
+            if (anterior.getElem().equals(elem)) {//Si es el inicial
+                inicio = inicio.getSigVertice();
+                seElimino = true;
+            } else {//no es el inicial loopeo por los vertices
+                while (anterior.getSigVertice() != null && !seElimino) {
+                    if (anterior.getSigVertice().getElem().equals(elem)) {
+                        //Si encontre el anterior borro el elemento.
+                        anterior.setSigVertice(anterior.getSigVertice().getSigVertice());
+                        seElimino = true;
+                    } else {
+                        //sigo buscando
+                        anterior = anterior.getSigVertice();
+                    }
                 }
             }
+            if (seElimino) {
+                eliminarAdyacentesAlVertice(elem);
+            }
         }
-        if (seElimino) {
-            eliminarAdyacentesAlVertice(elem);
-        }
-
         return seElimino;
     }
 
@@ -83,10 +84,10 @@ public class Grafo {
             adyAux = vertAux.getPrimerAdy();
             if (adyAux != null) {
                 if (adyAux.getVertice().getElem().equals(elem)) {//Si es el inicial
-                    adyAux.setSigAdyacente(adyAux.getSigAdyacente());
+                    vertAux.setPrimerAdy(adyAux.getSigAdyacente());
                     seElimino = true;
                 } else {//no es el inicial loopeo por los ady
-                    while (adyAux.getSigAdyacente() != null && !seElimino) {
+                    while (adyAux.getSigAdyacente() != null) {
                         if (adyAux.getSigAdyacente().getVertice().getElem().equals(elem)) {  //Si encontre el anterior borro el elemento.
                             adyAux.setSigAdyacente(adyAux.getSigAdyacente().getSigAdyacente());
                             seElimino = true;
@@ -509,7 +510,7 @@ public class Grafo {
         return p;
     }
 
-   /* public class Dijkstra {
+    /* public class Dijkstra {
 
         // Dijkstra's algorithm to find shortest path from s to all other nodes
         public int[] dijkstra(WeightedGraph G, int s) {
