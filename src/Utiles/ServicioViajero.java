@@ -128,13 +128,13 @@ public class ServicioViajero {
     }
 
     public void caminoMasCortoKilometros() {
-        /*String origen, destino;
+        String origen, destino;
         System.out.println("Ingrese origen: ");
         origen = TecladoIn.readLine().toUpperCase();
-        System.out.println("Ingrese destino: ");
+       /* System.out.println("Ingrese destino: ");
         destino = TecladoIn.readLine().toUpperCase();*/
         //System.out.println("Menor KM: " + conexiones.menorKilometraje(origen, destino));
-        conexiones.dijkstra("", "");
+        conexiones.dijkstra(origen, "");
     }
 
     public void caminoKilometroLimite() {

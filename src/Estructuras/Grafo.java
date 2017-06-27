@@ -522,9 +522,9 @@ public class Grafo {
             int posModificar = 0;
             int posAnterior = 0;
             double nuevaDistancia = 0;
-            elemActual = "A"; // ORIGEN!!!
-            distancia[vertices.getPos("A")] = 0;
-            anterior[vertices.getPos("A")] = null;
+            elemActual = origen; // ORIGEN!!!
+            distancia[vertices.getPos(elemActual)] = 0;
+            anterior[vertices.getPos(elemActual)] = null;
             while (posActual < cantElementos) {
                 //elemActual = vertices.recuperar(posActual);
                 auxAdy = getRefVertice(elemActual).getPrimerAdy();
