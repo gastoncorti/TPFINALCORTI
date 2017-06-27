@@ -141,7 +141,7 @@ public class Grafo {
 
     private void profundidadDesde(NodoVert nodov, ListaStr visitados) {
         if (nodov != null) {
-            visitados.insertar(nodov.getElem());
+            visitados.insertarAlFinal(nodov.getElem());
             NodoAdy ady = nodov.getPrimerAdy();
             while (ady != null) {
                 if (!visitados.pertenece(ady.getVertice().getElem())) {
@@ -172,7 +172,7 @@ public class Grafo {
             if (origen.getElem().equals(destino)) {
                 existe = true;
             } else {
-                visitados.insertar(origen.getElem());
+                visitados.insertarAlFinal(origen.getElem());
                 NodoAdy ady = origen.getPrimerAdy();
                 while (!existe && ady != null) {
                     if (!visitados.pertenece(ady.getVertice().getElem())) {
@@ -203,7 +203,7 @@ public class Grafo {
         cola.poner(inicial.getElem());
         while (!cola.esVacia()) {
             NodoVert auxVert = new NodoVert(cola.sacar());
-            visitados.insertar(auxVert.getElem());
+            visitados.insertarAlFinal(auxVert.getElem());
             NodoAdy auxAdy = auxVert.getPrimerAdy();
             while (auxAdy != null) {
                 if (!visitados.pertenece(auxVert.getElem())) {
@@ -449,53 +449,6 @@ public class Grafo {
         return 0.0;
     }
 
-    public void dijkstra(String origen, String destino) {
-        ListaStr lista = new ListaStr();
-        NodoVert auxVert = this.inicio;
-        int cantVert = cantVertices();
-
-        LinkedList<Double> dist = new LinkedList<Double>();
-        NodoVert[] prev = new NodoVert[cantVert];
-        NodoVert[] vertices = new NodoVert[cantVert];
-        String vertActual = "";
-
-        for (int i = 0; i < cantVert; i++) {
-            dist.add(Double.MAX_VALUE);
-            prev[i] = null;
-
-            lista.insertar(auxVert.getElem());
-            vertices[i] = auxVert;
-
-            auxVert = auxVert.getSigVertice();
-        }
-
-        dist.set(dist.size() - 1, 0D);
-
-        int pos;
-        double alt;
-        NodoAdy auxAdy;
-
-        while (!lista.esVacia()) {
-            pos = leastDistance(dist);
-            //auxVert = ubicarVertice(lista.recuperar(pos));
-            auxVert = vertices[pos];
-            lista.eliminar(pos + 1);
-            auxAdy = auxVert.getPrimerAdy();
-
-            while (auxAdy != null) {
-                alt = dist.get(pos) + peso(auxVert, auxAdy);
-                if (alt < dist.get(pos)) {
-                    dist.set(pos, alt);
-                    prev[pos] = auxVert;
-                }
-                auxAdy = auxAdy.getSigAdyacente();
-            }
-        }
-        //loop de los vertices
-        //loop de los ady
-
-    }
-
     private int leastDistance(LinkedList<Double> dist) {
         double menor;
         int p = 0;
@@ -537,7 +490,135 @@ public class Grafo {
         return p;
     }
 
-    /* public class Dijkstra {
+    public ListaStr dijkstra(String origen, String destino) {
+        ListaStr camino = null, visitados, vertices;
+        NodoVert auxVert;
+        NodoAdy auxAdy;
+        String elemActual;
+        String[] anterior;
+        double[] distancia;
+        int cantElementos;
+
+        if (this.inicio != null) {//Si el grafo esta vacio, return null
+            visitados = new ListaStr();
+            vertices = new ListaStr();
+            auxVert = this.inicio;
+
+            while (auxVert != null) {
+                elemActual = auxVert.getElem();
+                vertices.insertarAlFinal(elemActual);
+                auxVert = auxVert.getSigVertice();
+            }
+
+            cantElementos = vertices.longitud();
+            anterior = new String[cantElementos];
+            distancia = new double[cantElementos];
+            for (int i = 0; i < cantElementos; i++) {
+                distancia[i] = Integer.MAX_VALUE;
+                anterior[i] = null;
+            }
+
+            int posActual = 0;
+            int posModificar = 0;
+            int posAnterior = 0;
+            double nuevaDistancia = 0;
+            elemActual = "A"; // ORIGEN!!!
+            distancia[vertices.getPos("A")] = 0;
+            anterior[vertices.getPos("A")] = null;
+            while (posActual < cantElementos) {
+                //elemActual = vertices.recuperar(posActual);
+                auxAdy = getRefVertice(elemActual).getPrimerAdy();
+                while (auxAdy != null) {
+                    if (!visitados.pertenece(elemActual)) {
+                        posModificar = vertices.getPos(auxAdy.getVertice().getElem());
+                        //posAnterior = vertices.getPos(vertices.recuperar(posActual-1));
+                        posAnterior = (getRefVertice(anterior[posModificar]) == null) ? vertices.getPos(elemActual) : vertices.getPos(getRefVertice(anterior[posModificar]).getElem());
+                        nuevaDistancia = auxAdy.getEtiqueta() + distancia[posAnterior];
+                        if (distancia[posModificar] > nuevaDistancia ) {
+                            distancia[posModificar] = nuevaDistancia;
+                            anterior[posModificar] = elemActual;
+                        }
+                        auxAdy = auxAdy.getSigAdyacente();
+                    } else {
+                        auxAdy = auxAdy.getSigAdyacente();
+                    }
+                }
+                visitados.insertarAlFinal(elemActual);
+                
+                posActual++;
+                elemActual = vertices.recuperar(posActual);
+            }
+
+            for (int i = 0; i < distancia.length; i++) {
+                System.out.println("Vert: " + vertices.recuperar(i) + "\tDist: "+ distancia[i] + "\tPrev: " + anterior[i]);
+            }
+        }
+
+        return camino;
+    }
+
+    private NodoVert getRefVertice(String elem) {
+        NodoVert buscado = null;
+        NodoVert auxVert = this.inicio;
+        boolean corte = false;
+
+        while (!corte && auxVert != null) {
+            if (auxVert.getElem().equals(elem)) {
+                corte = true;
+                buscado = auxVert;
+            }
+            auxVert = auxVert.getSigVertice();
+        }
+
+        return buscado;
+    }
+    /* public void dijkstra(String origen, String destino) {
+        ListaStr lista = new ListaStr();
+        NodoVert auxVert = this.inicio;
+        int cantVert = cantVertices();
+
+        LinkedList<Double> dist = new LinkedList<Double>();
+        NodoVert[] prev = new NodoVert[cantVert];
+        NodoVert[] vertices = new NodoVert[cantVert];
+        String vertActual = "";
+
+        for (int i = 0; i < cantVert; i++) {
+            dist.add(Double.MAX_VALUE);
+            prev[i] = null;
+
+            lista.insertarAlFinal(auxVert.getElem());
+            vertices[i] = auxVert;
+
+            auxVert = auxVert.getSigVertice();
+        }
+
+        dist.set(dist.size() - 1, 0D);
+
+        int pos;
+        double alt;
+        NodoAdy auxAdy;
+
+        while (!lista.esVacia()) {
+            pos = leastDistance(dist);
+            //auxVert = ubicarVertice(lista.recuperar(pos));
+            auxVert = vertices[pos];
+            lista.eliminar(pos + 1);
+            auxAdy = auxVert.getPrimerAdy();
+
+            while (auxAdy != null) {
+                alt = dist.get(pos) + peso(auxVert, auxAdy);
+                if (alt < dist.get(pos)) {
+                    dist.set(pos, alt);
+                    prev[pos] = auxVert;
+                }
+                auxAdy = auxAdy.getSigAdyacente();
+            }
+        }
+        //loop de los vertices
+        //loop de los ady
+
+    }*/
+ /* public class Dijkstra {
 
         // Dijkstra's algorithm to find shortest path from s to all other nodes
         public int[] dijkstra(WeightedGraph G, int s) {

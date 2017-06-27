@@ -128,13 +128,13 @@ public class ServicioViajero {
     }
 
     public void caminoMasCortoKilometros() {
-        String origen, destino;
+        /*String origen, destino;
         System.out.println("Ingrese origen: ");
         origen = TecladoIn.readLine().toUpperCase();
         System.out.println("Ingrese destino: ");
-        destino = TecladoIn.readLine().toUpperCase();
+        destino = TecladoIn.readLine().toUpperCase();*/
         //System.out.println("Menor KM: " + conexiones.menorKilometraje(origen, destino));
-        conexiones.dijkstra(origen, destino);
+        conexiones.dijkstra("", "");
     }
 
     public void caminoKilometroLimite() {
@@ -198,7 +198,7 @@ public class ServicioViajero {
     }
 
     public void cargaInicial() {
-        
+
         diccionario.insertar("CONCEPCION", new Ciudad("CONCEPCION", "TUCUMAN", 46194, false));
         conexiones.insertarVertice("CONCEPCION");
         diccionario.insertar("CORDOBA", new Ciudad("CORDOBA", "CORDOBA", 157010, true));
@@ -273,29 +273,45 @@ public class ServicioViajero {
         conexiones.insertarArco("USHUAIA", "AZUL", 527);
         conexiones.insertarArco("USHUAIA", "MENDOZA", 184);
     }
-    
+
     public void cargaTesting() {
-        diccionario.insertar("D", new Ciudad("D","D", 10, true));
-        diccionario.insertar("E", new Ciudad("E","E", 10, false));
-        diccionario.insertar("C", new Ciudad("C","C", 10, false));
-        diccionario.insertar("A", new Ciudad("A","A", 10, true));
-        diccionario.insertar("B", new Ciudad("B","B", 10, true));
-        
+        diccionario.insertar("D", new Ciudad("D", "D", 10, true));
+        diccionario.insertar("E", new Ciudad("E", "E", 10, false));
+        diccionario.insertar("C", new Ciudad("C", "C", 10, false));
+        diccionario.insertar("A", new Ciudad("A", "A", 10, true));
+        diccionario.insertar("B", new Ciudad("B", "B", 10, true));
+
         conexiones.insertarVertice("C");
         conexiones.insertarVertice("E");
         conexiones.insertarVertice("A");
         conexiones.insertarVertice("D");
         conexiones.insertarVertice("B");
-        
+
+        conexiones.insertarArco("A", "B", 5);
+        conexiones.insertarArco("B", "D", 10);
+        conexiones.insertarArco("A", "C", 5);
         conexiones.insertarArco("C", "D", 5);
         
+        /*conexiones.insertarArco("A", "B", 6);
+        conexiones.insertarArco("B", "A", 6);
+
+        conexiones.insertarArco("A", "D", 1);
+        conexiones.insertarArco("D", "A", 1);
+
+        conexiones.insertarArco("D", "B", 2);
+        conexiones.insertarArco("B", "D", 2);
+
+        conexiones.insertarArco("D", "E", 1);
+        conexiones.insertarArco("E", "D", 1);
+
+        conexiones.insertarArco("B", "E", 2);
+        conexiones.insertarArco("E", "B", 2);
+        
         conexiones.insertarArco("E", "C", 5);
+        conexiones.insertarArco("C", "E", 5);
         
-        conexiones.insertarArco("B", "D", 5);
-        
-        conexiones.insertarArco("A", "D", 30);
-        conexiones.insertarArco("A", "B", 10);
-        conexiones.insertarArco("A", "C", 5);
-        conexiones.insertarArco("A", "E", 10);
+        conexiones.insertarArco("C", "B", 5);
+        conexiones.insertarArco("B", "C", 5);*/
+
     }
 }

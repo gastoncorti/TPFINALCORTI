@@ -8,7 +8,7 @@ public class ListaStr {
         this.cabecera = null;
     }
 
-    public boolean insertar(String elem) {
+    public boolean insertarAlFinal(String elem) {
         boolean seInserto = false;
         NodoStr aux = cabecera;
         if (aux != null) {
@@ -24,10 +24,10 @@ public class ListaStr {
 
     public boolean insertar(String elem, int pos) {
         boolean seInserto = false;
-        if (pos >= 1 || pos <= this.longitud() + 1) {
-            if (pos != 1) {
+        if (pos >= 0 || pos <= this.longitud() + 1) {
+            if (pos != 0) {
                 NodoStr aux = cabecera;
-                int i = 1;
+                int i = 0;
                 while (i < pos - 1) {
                     i++;
                     aux = aux.getEnlace();
@@ -44,10 +44,10 @@ public class ListaStr {
 
     public boolean eliminar(int pos) {
         boolean seElimino = false;
-        if (pos >= 1 && pos <= this.longitud()) {
-            if (pos != 1) {
+        if (pos >= 0 && pos <= this.longitud()) {
+            if (pos != 0) {
                 NodoStr aux = cabecera;
-                int i = 1;
+                int i = 0;
                 while (i < pos - 1) {
                     i++;
                     aux = aux.getEnlace();
@@ -61,38 +61,31 @@ public class ListaStr {
         }
         return seElimino;
     }
-   /* public boolean eliminar(String elem) {
-        boolean seElimino = false;
+
+    public int getPos(String elem) {
+        int cont = 0;
+        int pos = -1;
+        boolean corte = false;
         NodoStr nodoAux = this.cabecera;
-        if(nodoAux != null) {
-            
-        }
-        if (pos >= 1 && pos <= this.longitud()) {
-            if (pos != 1) {
-                NodoStr aux = cabecera;
-                int i = 1;
-                while (i < pos - 1) {
-                    i++;
-                    aux = aux.getEnlace();
-                }
-                aux.setEnlace(aux.getEnlace().getEnlace());
-                seElimino = true;
-            } else {
-                cabecera = cabecera.getEnlace();
-                seElimino = true;
+        while (!corte && nodoAux != null) {
+            if (nodoAux.getElem().equals(elem)) {
+                corte = true;
+                pos = cont;
             }
+            cont++;
+            nodoAux = nodoAux.getEnlace();
         }
-        return seElimino;
-    }*/
+        return pos;
+    }
 
     public String recuperar(int pos) {
         String elem = "";
         if (cabecera != null && (pos > 0 || pos <= this.longitud())) {
-            if (pos == 1) {
+            if (pos == 0) {
                 elem = cabecera.getElem();
             } else {
                 NodoStr aux = cabecera;
-                int cont = 1;
+                int cont = 0;
                 while (aux != null) {
                     if (cont != pos) {
                         aux = aux.getEnlace();
@@ -132,7 +125,7 @@ public class ListaStr {
         ListaStr clon = new ListaStr();
         NodoStr aux = cabecera;
         while (aux != null) {
-            clon.insertar(aux.getElem());
+            clon.insertarAlFinal(aux.getElem());
             aux = aux.getEnlace();
         }
         return clon;
@@ -157,7 +150,7 @@ public class ListaStr {
         String cad = "";
         if (!esVacia()) {
             NodoStr aux = cabecera;
-            for (int i = 1; i <= this.longitud(); i++) {
+            for (int i = 0; i <= this.longitud(); i++) {
                 cad = cad + aux.getElem() + " ";
                 aux = aux.getEnlace();
             }

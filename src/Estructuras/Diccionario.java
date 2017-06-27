@@ -372,7 +372,7 @@ public class Diccionario {
             }
         }
         if (raizActual.getClave().compareTo(inicio) >= 0 && raizActual.getClave().compareTo(fin) <= 0) {
-            lista.insertar(raizActual.getClave());
+            lista.insertarAlFinal(raizActual.getClave());
         }
 
         if (fin.compareTo(raizActual.getClave()) > 0) {
