@@ -131,10 +131,11 @@ public class ServicioViajero {
         String origen, destino;
         System.out.println("Ingrese origen: ");
         origen = TecladoIn.readLine().toUpperCase();
-       /* System.out.println("Ingrese destino: ");
-        destino = TecladoIn.readLine().toUpperCase();*/
+        System.out.println("Ingrese destino: ");
+        destino = TecladoIn.readLine().toUpperCase();
         //System.out.println("Menor KM: " + conexiones.menorKilometraje(origen, destino));
-        conexiones.dijkstra(origen, "");
+        ListaStr camino = conexiones.dijkstra(origen, destino);
+        System.out.println(camino.toString());
     }
 
     public void caminoKilometroLimite() {
@@ -313,5 +314,78 @@ public class ServicioViajero {
         conexiones.insertarArco("C", "B", 5);
         conexiones.insertarArco("B", "C", 5);*/
 
+    }
+    
+    public void cargaTesting2() {
+        diccionario.insertar("NEUQUEN", new Ciudad("NEUQUEN", "NEUQUEN", 500000, true));
+        diccionario.insertar("POSADAS", new Ciudad("POSADAS", "MISIONES", 344833, true));
+        diccionario.insertar("CORDOBA", new Ciudad("CORDOBA", "CORDOBA", 1391000, false));
+        diccionario.insertar("USUAHIA", new Ciudad("USUAHIA", "TIERRA DEL FUEGO", 54546, true));
+        diccionario.insertar("SALTA", new Ciudad("SALTA", "SALTA", 535303, true));
+        diccionario.insertar("MENDOZA", new Ciudad("MENDOZA", "MENDOZA", 115041, false));
+        diccionario.insertar("TRELEW", new Ciudad("TRELEW", "CHUBUT", 50000, true));
+        diccionario.insertar("CORRIENTES", new Ciudad("CORRIENTES", "CORRIENTES", 654325, true));
+        diccionario.insertar("NECOCHEA", new Ciudad("NECOCHEA", "BUENOS AIRES", 416633, false));
+        diccionario.insertar("VIEDMA", new Ciudad("VIEDMA", "CHUBUT", 232456, true));
+        diccionario.insertar("TANDIL", new Ciudad("TANDIL", "BUENOS AIRES", 24564, false));
+        diccionario.insertar("PARANA", new Ciudad("PARANA", "ENTRE RIOS", 247863, false));
+        diccionario.insertar("RESISTENCIA", new Ciudad("RESISTENCIA", "CHACO", 291720, true));
+        diccionario.insertar("ROSARIO", new Ciudad("ROSARIO", "SANTA FE", 1194000, true));
+        diccionario.insertar("ANGACO", new Ciudad("ANGACO", "SAN JUAN", 45879, false));
+        conexiones.insertarVertice("NEUQUEN");
+        conexiones.insertarVertice("POSADAS");
+        conexiones.insertarVertice("CORDOBA");
+        conexiones.insertarVertice("USUAHIA");
+        conexiones.insertarVertice("SALTA");
+        conexiones.insertarVertice("MENDOZA");
+        conexiones.insertarVertice("TRELEW");
+        conexiones.insertarVertice("CORRIENTES");
+        conexiones.insertarVertice("NECOCHEA");
+        conexiones.insertarVertice("VIEDMA");
+        conexiones.insertarVertice("TANDIL");
+        conexiones.insertarVertice("PARANA");
+        conexiones.insertarVertice("RESISTENCIA");
+        conexiones.insertarVertice("ROSARIO");
+        conexiones.insertarVertice("ANGACO");
+
+        conexiones.insertarArco("USUAHIA", "TRELEW", 150);
+
+        conexiones.insertarArco("VIEDMA", "NECOCHEA", 700);
+
+        conexiones.insertarArco("TRELEW", "VIEDMA", 30);
+        conexiones.insertarArco("TRELEW", "NEUQUEN", 600);
+        conexiones.insertarArco("TRELEW", "USUAHIA", 150);
+
+        conexiones.insertarArco("NEUQUEN", "TRELEW", 650);
+        conexiones.insertarArco("NEUQUEN", "MENDOZA", 500);
+        conexiones.insertarArco("NEUQUEN", "CORDOBA", 800);
+
+        conexiones.insertarArco("CORDOBA", "NECOCHEA", 139);
+        conexiones.insertarArco("CORDOBA", "ROSARIO", 160);
+        conexiones.insertarArco("CORDOBA", "ANGACO", 111);
+
+        conexiones.insertarArco("MENDOZA", "CORDOBA", 183);
+
+        conexiones.insertarArco("NECOCHEA", "TANDIL", 100);
+        conexiones.insertarArco("NECOCHEA", "NEUQUEN", 900);
+
+        conexiones.insertarArco("TANDIL", "PARANA", 33);
+        conexiones.insertarArco("TANDIL", "ROSARIO", 99);
+
+        conexiones.insertarArco("ANGACO", "SALTA", 43);
+
+        conexiones.insertarArco("ROSARIO", "CORRIENTES", 25);
+
+        conexiones.insertarArco("POSADAS", "CORRIENTES", 40);
+
+        conexiones.insertarArco("CORRIENTES", "POSADAS", 30);
+
+        conexiones.insertarArco("PARANA", "POSADAS", 68);
+        conexiones.insertarArco("PARANA", "ROSARIO", 49);
+
+        conexiones.insertarArco("RESISTENCIA", "SALTA", 60);
+        conexiones.insertarArco("RESISTENCIA", "CORRIENTES", 100);
+
+        conexiones.insertarArco("SALTA", "CORDOBA", 222);
     }
 }

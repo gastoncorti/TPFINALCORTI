@@ -14,8 +14,8 @@ public class Main {
         boolean corriendo = true;
         //Pruebas();
         ServicioViajero sv = new ServicioViajero();
-        //sv.cargaTesting();
-        sv.cargaInicial();
+        sv.cargaTesting2();
+        //sv.cargaInicial();
         
         while (corriendo) {
             

@@ -24,7 +24,7 @@ public class ListaStr {
 
     public boolean insertar(String elem, int pos) {
         boolean seInserto = false;
-        if (pos >= 0 || pos <= this.longitud() + 1) {
+        if (pos >= 0 || pos < this.longitud()) {
             if (pos != 0) {
                 NodoStr aux = cabecera;
                 int i = 0;
@@ -44,7 +44,7 @@ public class ListaStr {
 
     public boolean eliminar(int pos) {
         boolean seElimino = false;
-        if (pos >= 0 && pos <= this.longitud()) {
+        if (pos >= 0 && pos < this.longitud()) {
             if (pos != 0) {
                 NodoStr aux = cabecera;
                 int i = 0;
@@ -80,7 +80,7 @@ public class ListaStr {
 
     public String recuperar(int pos) {
         String elem = "";
-        if (cabecera != null && (pos > 0 || pos <= this.longitud())) {
+        if (cabecera != null && (pos > 0 || pos < this.longitud())) {
             if (pos == 0) {
                 elem = cabecera.getElem();
             } else {
@@ -150,7 +150,7 @@ public class ListaStr {
         String cad = "";
         if (!esVacia()) {
             NodoStr aux = cabecera;
-            for (int i = 0; i <= this.longitud(); i++) {
+            for (int i = 0; i < this.longitud(); i++) {
                 cad = cad + aux.getElem() + " ";
                 aux = aux.getEnlace();
             }

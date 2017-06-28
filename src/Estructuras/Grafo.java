@@ -229,7 +229,7 @@ public class Grafo {
         NodoAdy aux;
         ListaStr menorAux;
         if (!visitados.pertenece(partida.getElem())) {
-            visitados.insertar(partida.getElem(), visitados.longitud() + 1);
+            visitados.insertarAlFinal(partida.getElem());
             if (partida.getElem().equals(llegada)) {
                 if (menor.esVacia()) {
                     menor = visitados.clonar();
@@ -254,7 +254,7 @@ public class Grafo {
                     aux = aux.getSigAdyacente();
                 }
             }
-            visitados.eliminar(visitados.longitud());
+            visitados.eliminar(visitados.longitud()-1);
         }
         return menor;
     }
@@ -275,7 +275,7 @@ public class Grafo {
         //System.out.println("Visitados hasta ahora " + visitados.toString());
         NodoAdy aux;
         if (!visitados.pertenece(partida.getElem())) {
-            visitados.insertar(partida.getElem(), visitados.longitud() + 1);
+            visitados.insertarAlFinal(partida.getElem());
             if (partida.getElem().equals(llegada)) {
                 if (minimoHastaAhora == -1) {
                     minimoHastaAhora = kilometros;
@@ -295,7 +295,7 @@ public class Grafo {
                     aux = aux.getSigAdyacente();
                 }
             }
-            visitados.eliminar(visitados.longitud());
+            visitados.eliminar(visitados.longitud()-1);
         }
         //System.out.println("Sale del vertice " + partida.getElem());
         return minimoHastaAhora;
@@ -317,7 +317,7 @@ public class Grafo {
         ListaStr menorAux;
         boolean alojActual = false;
         if (!visitados.pertenece(partida.getElem())) {
-            visitados.insertar(partida.getElem(), visitados.longitud() + 1);
+            visitados.insertarAlFinal(partida.getElem());
             if (partida.getElem().equals(llegada)) {
                 if (menor.esVacia()) {
                     menor = visitados.clonar();
@@ -345,7 +345,7 @@ public class Grafo {
                     auxAdy = auxAdy.getSigAdyacente();
                 }
             }
-            visitados.eliminar(visitados.longitud());
+            visitados.eliminar(visitados.longitud()-1);
         }
         return menor;
     }
@@ -491,10 +491,11 @@ public class Grafo {
     }
 
     public ListaStr dijkstra(String origen, String destino) {
-        ListaStr camino = null, visitados, vertices;
+        ListaStr camino=null, visitados, vertices;
+        ColaStr colaAdy = new ColaStr();
         NodoVert auxVert;
         NodoAdy auxAdy;
-        String elemActual;
+        String verticeActual;
         String[] anterior;
         double[] distancia;
         int cantElementos;
@@ -505,8 +506,8 @@ public class Grafo {
             auxVert = this.inicio;
 
             while (auxVert != null) {
-                elemActual = auxVert.getElem();
-                vertices.insertarAlFinal(elemActual);
+                verticeActual = auxVert.getElem();
+                vertices.insertarAlFinal(verticeActual);
                 auxVert = auxVert.getSigVertice();
             }
 
@@ -517,46 +518,44 @@ public class Grafo {
                 distancia[i] = Integer.MAX_VALUE;
                 anterior[i] = null;
             }
-
-            int posActual = 0;
+            
             int posModificar = 0;
-            int posAnterior = 0;
+            int posDeDondeSaleArco = 0;
             double nuevaDistancia = 0;
-            elemActual = origen; // ORIGEN!!!
-            distancia[vertices.getPos(elemActual)] = 0;
-            anterior[vertices.getPos(elemActual)] = null;
-            while (posActual < cantElementos) {
-                //elemActual = vertices.recuperar(posActual);
-                auxAdy = getRefVertice(elemActual).getPrimerAdy();
-                while (auxAdy != null) {
-                    if (!visitados.pertenece(elemActual)) {
-                        posModificar = vertices.getPos(auxAdy.getVertice().getElem());
-                        //posAnterior = vertices.getPos(vertices.recuperar(posActual-1));
-                        posAnterior = (getRefVertice(anterior[posModificar]) == null) ? vertices.getPos(elemActual) : vertices.getPos(getRefVertice(anterior[posModificar]).getElem());
-                        nuevaDistancia = auxAdy.getEtiqueta() + distancia[posAnterior];
-                        if (distancia[posModificar] > nuevaDistancia ) {
+            verticeActual = origen; // ORIGEN!!!
+            distancia[vertices.getPos(verticeActual)] = 0;
+            anterior[vertices.getPos(verticeActual)] = null;
+            while (verticeActual != null) { //HASTA QUE VERTICEACTUAL SEA NULL ES DECIR NO TENGA MAS PARA ITERAR
+                auxAdy = getRefVertice(verticeActual).getPrimerAdy(); //ACA LEVANTO EL VERTICE(NODO) PARA PREGUNTARLE POR SU ADY
+                while (auxAdy != null) {//MIENTRAS ESE ADY NO SEA NULLO
+                    if (!visitados.pertenece(verticeActual)) { //ESTA ES LA LISTA DE VISITADOS PARA NO REPETIR
+                        posModificar = vertices.getPos(auxAdy.getVertice().getElem()); //GETPOS ME DA EL INDICE PARA SABER CUAL MODIFICAR
+                        posDeDondeSaleArco = vertices.getPos(verticeActual); //ACA SE DE CUAL NODO VENGO PARA SUMAR
+                        nuevaDistancia = auxAdy.getEtiqueta() + distancia[posDeDondeSaleArco]; //LEVANTO LA NUEVA DISTANCIA
+                        if (distancia[posModificar] > nuevaDistancia ) {//EL PASO DIJTRAM QUE HACE LA MAGIA
                             distancia[posModificar] = nuevaDistancia;
-                            anterior[posModificar] = elemActual;
+                            anterior[posModificar] = verticeActual;
                         }
-                        auxAdy = auxAdy.getSigAdyacente();
-                    } else {
+                        colaAdy.poner(auxAdy.getVertice().getElem()); //ACA AGREGO AL ADY ACTUAL PARA SEGUIR USANDO ELEMENTOS DE ACA( PARA QUE NO SEA RANDOM) GRACIAS CUNI :) IDEA TUYA
+                        auxAdy = auxAdy.getSigAdyacente(); 
+                    } else { //SI SE VA AL ELSE SIGNIFICA QUE EL VERTICE ACTUAL YA SE HABIA VISITADO NO HACE FALTA METERTELO EN EL UPITE DIGO LA COLA
                         auxAdy = auxAdy.getSigAdyacente();
                     }
                 }
-                visitados.insertarAlFinal(elemActual);
-                
-                posActual++;
-                elemActual = vertices.recuperar(posActual);
+                visitados.insertarAlFinal(verticeActual);//inserto el vertice que anote todos sus arcos
+                verticeActual = colaAdy.sacar();//ACA RECUPERO EL PRIMERO (SE PODRIA USAR COLA DE PRIORIDAD PARA QUE NO SEA GREEDY)
             }
-
+            // DEBUG ONLY
             for (int i = 0; i < distancia.length; i++) {
                 System.out.println("Vert: " + vertices.recuperar(i) + "\tDist: "+ distancia[i] + "\tPrev: " + anterior[i]);
             }
+            //DEBUG ONLY
+            camino = armarCaminoDijs(vertices, distancia, anterior, origen, destino);
         }
-
+        
         return camino;
     }
-
+    
     private NodoVert getRefVertice(String elem) {
         NodoVert buscado = null;
         NodoVert auxVert = this.inicio;
@@ -571,5 +570,19 @@ public class Grafo {
         }
 
         return buscado;
+    }
+    
+    private ListaStr armarCaminoDijs(ListaStr vert, double[] dist, String[] anterior, String origen, String destino) {
+        ListaStr camino = new ListaStr();
+        camino.insertar(destino, 0); // ultimo el destino
+        int pos = -1;
+        
+        String vertActual = destino;
+        while(!vertActual.equals(origen)) {
+            pos = vert.getPos(vertActual);
+            vertActual = anterior[pos];
+            camino.insertar(vertActual, 0);   
+        }
+        return camino;
     }
 }
