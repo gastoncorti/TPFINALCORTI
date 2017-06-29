@@ -139,7 +139,7 @@ public class ServicioViajero {
     }
 
     public void caminoKilometroLimite() {
-        double kmMaximo = -1;
+        /*double kmMaximo = -1;
         String origen, destino;
         System.out.println("Ingrese origen: ");
         origen = TecladoIn.readLine().toUpperCase();
@@ -152,7 +152,7 @@ public class ServicioViajero {
             System.out.println("Lo siento, la distancia es muy corta o no encontre un camino.");
         } else {
             System.out.println("El kilometraje minimo es: " + kmMinimoConseguido + " km.");
-        }
+        }*/
     }
 
     public void caminoConAlojamiento() {

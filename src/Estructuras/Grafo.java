@@ -240,7 +240,7 @@ public class Grafo {
                 }
             } else {
                 aux = partida.getPrimerAdy();
-                while (aux != null) {
+                while (aux != null) { // MODIFICACION CUNI
                     menorAux = caminoMenorCantCiudadesAux(aux.getVertice(), visitados, menor, llegada);
                     if (!menorAux.esVacia()) {
                         if (!menor.esVacia()) {
@@ -254,51 +254,9 @@ public class Grafo {
                     aux = aux.getSigAdyacente();
                 }
             }
-            visitados.eliminar(visitados.longitud()-1);
+            visitados.eliminar(visitados.longitud() - 1);
         }
         return menor;
-    }
-
-    public double menorKilometraje(String partida, String llegada) {
-        double salida = 0;
-        ListaStr visitados = new ListaStr();
-        NodoVert vPartida = ubicarVertice(partida);
-        NodoVert vLlegada = ubicarVertice(llegada);
-        if (vPartida != null && vLlegada != null) {
-            salida = menorKilometrajeAux(vPartida, visitados, llegada, -1, -1);
-        }
-        return salida;
-    }
-
-    private double menorKilometrajeAux(NodoVert partida, ListaStr visitados, String llegada, double minimoHastaAhora, double kilometros) {
-        //System.out.println("Entra con vertice " + partida.getElem());
-        //System.out.println("Visitados hasta ahora " + visitados.toString());
-        NodoAdy aux;
-        if (!visitados.pertenece(partida.getElem())) {
-            visitados.insertarAlFinal(partida.getElem());
-            if (partida.getElem().equals(llegada)) {
-                if (minimoHastaAhora == -1) {
-                    minimoHastaAhora = kilometros;
-                } else {
-                    if (kilometros < minimoHastaAhora) {
-                        minimoHastaAhora = kilometros;
-                    }
-                }
-            } else {
-                aux = partida.getPrimerAdy();
-                while (aux != null) {
-                    //System.out.println("etiqueta del rotulo " + aux.getEtiqueta());
-                    minimoHastaAhora = menorKilometrajeAux(aux.getVertice(), visitados, llegada, minimoHastaAhora, kilometros + aux.getEtiqueta());
-                    if (minimoHastaAhora == -1) {
-                        minimoHastaAhora = kilometros;
-                    }
-                    aux = aux.getSigAdyacente();
-                }
-            }
-            visitados.eliminar(visitados.longitud()-1);
-        }
-        //System.out.println("Sale del vertice " + partida.getElem());
-        return minimoHastaAhora;
     }
 
     public ListaStr caminoConAlojamiento(String partida, String llegada, Diccionario dicc) {
@@ -345,48 +303,11 @@ public class Grafo {
                     auxAdy = auxAdy.getSigAdyacente();
                 }
             }
-            visitados.eliminar(visitados.longitud()-1);
+            visitados.eliminar(visitados.longitud() - 1);
         }
         return menor;
     }
 
-    /*public ListaStr existeCaminoAlojamiento(String partida, String llegada, Diccionario dicc) {
-        NodoVert vertPartida = ubicarVertice(partida);
-        NodoVert vertLlegada = ubicarVertice(llegada);
-        ListaStr visitados = new ListaStr();
-        boolean res;
-        if (vertPartida != null && vertLlegada != null) {
-            res = existeCaminoAlojamientoAux(vertPartida, visitados, partida, llegada, false, dicc);
-        }
-        if (visitados.longitud() == 1 && visitados.pertenece(partida)) {
-            visitados.vaciar();
-        }
-        if (!visitados.pertenece(llegada)) {
-            visitados.vaciar();
-        }
-        return visitados;
-    }
-
-    private boolean existeCaminoAlojamientoAux(NodoVert partida, ListaStr visitados, String origen, String llegada, boolean res, Diccionario dicc) {
-        NodoAdy aux;
-        if (!visitados.pertenece(partida.getElem())) {
-            if (partida.getElem().equalsIgnoreCase(origen) || partida.getElem().equalsIgnoreCase(llegada)
-                    || dicc.recuperarElemento(partida.getElem()).isAlojamientoDisp()) {
-                visitados.insertar(partida.getElem(), visitados.longitud() + 1);
-                aux = partida.getPrimerAdy();
-                while (!res && aux != null) {
-                    if (aux.getVertice().getElem().equalsIgnoreCase(llegada)) {
-                        res = true;
-                        visitados.insertar(llegada, visitados.longitud() + 1);
-                    } else {
-                        res = existeCaminoAlojamientoAux(aux.getVertice(), visitados, origen, llegada, res, dicc);
-                    }
-                    aux = aux.getSigAdyacente();
-                }
-            }
-        }
-        return res;
-    }*/
     @Override
     public String toString() {
         String cad = "";
@@ -491,14 +412,14 @@ public class Grafo {
     }
 
     public ListaStr dijkstra(String origen, String destino) {
-        ListaStr camino=null, visitados, vertices;
+        ListaStr camino = null, visitados, vertices;
         ColaStr colaAdy = new ColaStr();
         NodoVert auxVert;
         NodoAdy auxAdy;
         String verticeActual;
         String[] anterior;
         double[] distancia;
-        int cantElementos;
+        int cantElementos = 0;
 
         if (this.inicio != null) {//Si el grafo esta vacio, return null
             visitados = new ListaStr();
@@ -509,53 +430,63 @@ public class Grafo {
                 verticeActual = auxVert.getElem();
                 vertices.insertarAlFinal(verticeActual);
                 auxVert = auxVert.getSigVertice();
+                cantElementos++;
             }
-
-            cantElementos = vertices.longitud();
+            
             anterior = new String[cantElementos];
             distancia = new double[cantElementos];
             for (int i = 0; i < cantElementos; i++) {
                 distancia[i] = Integer.MAX_VALUE;
                 anterior[i] = null;
             }
-            
-            int posModificar = 0;
-            int posDeDondeSaleArco = 0;
-            double nuevaDistancia = 0;
+
+            int posModificar;
+            int posDeDondeSaleArco;
+            double nuevaDistancia;
+            int posMenor;
             verticeActual = origen; // ORIGEN!!!
             distancia[vertices.getPos(verticeActual)] = 0;
             anterior[vertices.getPos(verticeActual)] = null;
-            while (verticeActual != null) { //HASTA QUE VERTICEACTUAL SEA NULL ES DECIR NO TENGA MAS PARA ITERAR
+            while (visitados.longitud() < cantElementos) { //HASTA QUE VERTICEACTUAL SEA NULL ES DECIR NO TENGA MAS PARA ITERAR
+                visitados.insertar(verticeActual, 0);
                 auxAdy = getRefVertice(verticeActual).getPrimerAdy(); //ACA LEVANTO EL VERTICE(NODO) PARA PREGUNTARLE POR SU ADY
                 while (auxAdy != null) {//MIENTRAS ESE ADY NO SEA NULLO
-                    if (!visitados.pertenece(verticeActual)) { //ESTA ES LA LISTA DE VISITADOS PARA NO REPETIR
+                    if (!visitados.pertenece(auxAdy.getVertice().getElem())) { //ESTA ES LA LISTA DE VISITADOS PARA NO REPETIR
                         posModificar = vertices.getPos(auxAdy.getVertice().getElem()); //GETPOS ME DA EL INDICE PARA SABER CUAL MODIFICAR
                         posDeDondeSaleArco = vertices.getPos(verticeActual); //ACA SE DE CUAL NODO VENGO PARA SUMAR
                         nuevaDistancia = auxAdy.getEtiqueta() + distancia[posDeDondeSaleArco]; //LEVANTO LA NUEVA DISTANCIA
-                        if (distancia[posModificar] > nuevaDistancia ) {//EL PASO DIJTRAM QUE HACE LA MAGIA
+                        if (distancia[posModificar] > nuevaDistancia) {//EL PASO DIJTRAM QUE HACE LA MAGIA
                             distancia[posModificar] = nuevaDistancia;
                             anterior[posModificar] = verticeActual;
                         }
                         colaAdy.poner(auxAdy.getVertice().getElem()); //ACA AGREGO AL ADY ACTUAL PARA SEGUIR USANDO ELEMENTOS DE ACA( PARA QUE NO SEA RANDOM) GRACIAS CUNI :) IDEA TUYA
-                        auxAdy = auxAdy.getSigAdyacente(); 
-                    } else { //SI SE VA AL ELSE SIGNIFICA QUE EL VERTICE ACTUAL YA SE HABIA VISITADO NO HACE FALTA METERTELO EN EL UPITE DIGO LA COLA
-                        auxAdy = auxAdy.getSigAdyacente();
-                    }
+                        //auxAdy = auxAdy.getSigAdyacente(); 
+                    }  //SI SE VA AL ELSE SIGNIFICA QUE EL VERTICE ACTUAL YA SE HABIA VISITADO NO HACE FALTA METERTELO EN EL UPITE DIGO LA COLA
+                    auxAdy = auxAdy.getSigAdyacente();
+
                 }
-                visitados.insertarAlFinal(verticeActual);//inserto el vertice que anote todos sus arcos
-                verticeActual = colaAdy.sacar();//ACA RECUPERO EL PRIMERO (SE PODRIA USAR COLA DE PRIORIDAD PARA QUE NO SEA GREEDY)
+                posMenor = 0;
+                for (int i = 0; i < cantElementos; i++) { //Revisar long de lista
+                    if (!visitados.pertenece(vertices.recuperar(i)) && distancia[i] < distancia[posMenor]) {
+                        posMenor = i;
+                    }
+                    verticeActual = vertices.recuperar(posMenor);
+
+                }
+                //visitados.insertar(verticeActual, 0);//inserto el vertice que anote todos sus arcos
+                //verticeActual = colaAdy.sacar();//ACA RECUPERO EL PRIMERO (SE PODRIA USAR COLA DE PRIORIDAD PARA QUE NO SEA GREEDY)
             }
             // DEBUG ONLY
             for (int i = 0; i < distancia.length; i++) {
-                System.out.println("Vert: " + vertices.recuperar(i) + "\tDist: "+ distancia[i] + "\tPrev: " + anterior[i]);
+                System.out.println("Vert: " + vertices.recuperar(i) + "\tDist: " + distancia[i] + "\tPrev: " + anterior[i]);
             }
             //DEBUG ONLY
             camino = armarCaminoDijs(vertices, distancia, anterior, origen, destino);
         }
-        
+
         return camino;
     }
-    
+
     private NodoVert getRefVertice(String elem) {
         NodoVert buscado = null;
         NodoVert auxVert = this.inicio;
@@ -571,17 +502,17 @@ public class Grafo {
 
         return buscado;
     }
-    
+
     private ListaStr armarCaminoDijs(ListaStr vert, double[] dist, String[] anterior, String origen, String destino) {
         ListaStr camino = new ListaStr();
         camino.insertar(destino, 0); // ultimo el destino
         int pos = -1;
-        
+
         String vertActual = destino;
-        while(!vertActual.equals(origen)) {
+        while (!vertActual.equals(origen)) {
             pos = vert.getPos(vertActual);
             vertActual = anterior[pos];
-            camino.insertar(vertActual, 0);   
+            camino.insertar(vertActual, 0);
         }
         return camino;
     }
