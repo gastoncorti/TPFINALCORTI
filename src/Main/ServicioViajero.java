@@ -1,8 +1,10 @@
-package Utiles;
+package Main;
 
 import Estructuras.Diccionario;
 import Estructuras.Grafo;
 import Estructuras.ListaStr;
+import Utiles.Ciudad;
+import Utiles.TecladoIn;
 
 public class ServicioViajero {
 
@@ -15,22 +17,23 @@ public class ServicioViajero {
     }
 
     public void altaCiudad() {
+        System.out.println("-NUEVA CIUDAD-\n");
         char aloj;
         boolean correcto = false;
         Ciudad nueva = new Ciudad();
         System.out.println("Ingrese Nombre: ");
-        nueva.setNombre(TecladoIn.readLine().toUpperCase());
-        System.out.println("Ingrese Prov: ");
-        nueva.setProvincia(TecladoIn.readLine().toUpperCase());
-        System.out.println("Ingrese hab: ");
-        nueva.setHabitantes(TecladoIn.readLineInt());
+        nueva.setNombre(TecladoIn.readLineWord().toUpperCase());
+        System.out.println("Ingrese Provincia: ");
+        nueva.setProvincia(TecladoIn.readLineWord().toUpperCase());
+        System.out.println("Ingrese cantidad habitantes: ");
+        nueva.setHabitantes(Math.abs(TecladoIn.readLineInt()));
         while (!correcto) {
             System.out.println("Tien alojamiento? (S/N): ");
-            aloj = TecladoIn.readNonwhiteChar();
-            if (aloj == 'S' || aloj == 's') {
+            aloj = Character.toUpperCase(TecladoIn.readNonwhiteChar());
+            if (aloj == 'S') {
                 correcto = true;
                 nueva.setAlojamientoDisp(true);
-            } else if (aloj == 'N' || aloj == 'n') {
+            } else if (aloj == 'N') {
                 nueva.setAlojamientoDisp(false);
                 correcto = true;
             }
@@ -43,25 +46,26 @@ public class ServicioViajero {
     }
 
     public void bajaCiudad() {
+        System.out.println("-ELIMINAR CIUDAD-\n");
         String bajaCiudad = "";
-        System.out.println("Nombre ciudad para dar de baja: ");
-        bajaCiudad = TecladoIn.readLine().toUpperCase();
+        System.out.println("Nombre ciudad: ");
+        bajaCiudad = TecladoIn.readLineWord().toUpperCase();
         if (diccionario.eliminar(bajaCiudad) && conexiones.eliminarVertice(bajaCiudad)) {
             System.out.println("Se dio de baja correctamente.");
         } else {
             System.out.println("La ciudad no existe.");
         }
-
     }
 
     public void altaRuta() {
+        System.out.println("-NUEVA RUTA-\n");
         String origen, destino;
-        int km = 0;
-        System.out.println("Ingrese origen: ");
-        origen = TecladoIn.readLine().toUpperCase();
-        System.out.println("Ingrese destino: ");
-        destino = TecladoIn.readLine().toUpperCase();
-        System.out.println("Ingrese Kilometraje: ");
+        int km;
+        System.out.println("Desde: ");
+        origen = TecladoIn.readLineWord().toUpperCase();
+        System.out.println("Hasta: ");
+        destino = TecladoIn.readLineWord().toUpperCase();
+        System.out.println("Distancia entre " + origen + " y " + destino + ": ");
         km = Math.abs(TecladoIn.readLineInt());
 
         if (conexiones.insertarArco(origen, destino, km)) {
@@ -72,42 +76,41 @@ public class ServicioViajero {
     }
 
     public void bajaRuta() {
+        System.out.println("-ELIMINAR RUTA-\n");
         String origen = "", destino = "";
         System.out.println("Nombre del origen de la ruta: ");
-        origen = TecladoIn.readLine().toUpperCase();
+        origen = TecladoIn.readLineWord().toUpperCase();
         System.out.println("Nombre del destino de la ruta: ");
-        destino = TecladoIn.readLine().toUpperCase();
+        destino = TecladoIn.readLineWord().toUpperCase();
         if (conexiones.eliminarAdyacente(origen, destino)) {
             System.out.println("Se dio de baja correctamente.");
         } else {
-            System.out.println("La ciudad origen/destino no existe o no existe la ruta.");
+            System.out.println("La ruta " + origen + "/" + destino + " no existe.");
         }
     }
 
     public void informacionCiudad() {
+        System.out.println("-INNFORMACION DE CIUDAD-\n");
         Ciudad ciudad;
         System.out.println("Ingrese ciudad: ");
-        ciudad = diccionario.recuperarElemento(TecladoIn.readLine().toUpperCase());
-        if (ciudad != null) {
-            System.out.println(ciudad.toString());
-        } else {
-            System.out.println("No se encontro la ciudad ingresada.");
-        }
-
+        ciudad = diccionario.recuperarElemento(TecladoIn.readLineWord().toUpperCase());
+        System.out.println(ciudad.toString());
     }
 
     public void listarRangoCiudades() {
+        System.out.println("-LISTAR RANGO-\n");
         String origen = "", destino = "";
         System.out.println("Nombre del inicio del rango: ");
-        origen = TecladoIn.readLine().toUpperCase();
+        origen = TecladoIn.readLineWord().toUpperCase();
         System.out.println("Nombre del fin del rango: ");
-        destino = TecladoIn.readLine().toUpperCase();
+        destino = TecladoIn.readLineWord().toUpperCase();
         ListaStr rango = diccionario.listarClavesRango(origen, destino);
         System.out.println(rango.toString());
 
     }
 
     public void caminoMasCortoCantCiudad() {
+        System.out.println("-MENOR CANTIDAD CIUDADES-\n");
         String origen = "", destino = "";
         System.out.println("Partida: ");
         origen = TecladoIn.readLine().toUpperCase();
@@ -118,6 +121,7 @@ public class ServicioViajero {
     }
 
     public void caminoMasCortoKilometros() {
+        System.out.println("-MENOR CANTIDAD DE KM-\n");
         String origen, destino;
         double menorDistancia;
         System.out.println("Ingrese origen: ");
@@ -134,6 +138,7 @@ public class ServicioViajero {
     }
 
     public void caminoKilometroLimite() {
+        System.out.println("-MENOR CANTIDAD QUE LIMITE KM-\n");
         double kmMaximo = -1;
         String origen, destino;
         System.out.println("Ingrese origen: ");
@@ -141,7 +146,7 @@ public class ServicioViajero {
         System.out.println("Ingrese destino: ");
         destino = TecladoIn.readLine().toUpperCase();
         System.out.println("Ingrese kilometraje máximo: ");
-        kmMaximo = TecladoIn.readLineDouble();
+        kmMaximo = Math.abs(TecladoIn.readLineDouble());
         double kmMinimoConseguido = conexiones.dijkstramMenorDistancia(origen, destino);
         if (kmMinimoConseguido >= kmMaximo) {
             System.out.println("Lo siento, la distancia es muy corta o no encontre un camino.");
@@ -151,6 +156,7 @@ public class ServicioViajero {
     }
 
     public void caminoConAlojamiento() {
+        System.out.println("-CAMINO CON ALOJAMIENTO-\n");
         String origen, destino;
         System.out.println("Ingrese origen: ");
         origen = TecladoIn.readLine().toUpperCase();
@@ -162,18 +168,21 @@ public class ServicioViajero {
     }
 
     public void listarCiudadesAlfab() {
+        System.out.println("-LISTA DE CIUDADES ORDENADAS-\n");
         System.out.println(diccionario.listarAlfabeticamente());
     }
 
     public void mostrarDic() {
+        System.out.println("-DICCIONARIO-\n");
         System.out.println(diccionario.toString());
     }
 
     public void mostrarGrafo() {
+        System.out.println("-GRAFO-\n");
         System.out.println(conexiones.toString());
     }
 
-    public static void menu() {
+    public static void mostrarOpciones() {
         final String MENU = "\n-SERVICIOS DEL VIAJERO- v1.0\n"
                 + "\u2713 1 - Alta Ciudad.\n"
                 + "\u2713 2 - Baja Ciudad.\n"
@@ -288,26 +297,6 @@ public class ServicioViajero {
         conexiones.insertarArco("A", "C", 5);
         conexiones.insertarArco("C", "D", 5);
 
-        /*conexiones.insertarArco("A", "B", 6);
-        conexiones.insertarArco("B", "A", 6);
-
-        conexiones.insertarArco("A", "D", 1);
-        conexiones.insertarArco("D", "A", 1);
-
-        conexiones.insertarArco("D", "B", 2);
-        conexiones.insertarArco("B", "D", 2);
-
-        conexiones.insertarArco("D", "E", 1);
-        conexiones.insertarArco("E", "D", 1);
-
-        conexiones.insertarArco("B", "E", 2);
-        conexiones.insertarArco("E", "B", 2);
-        
-        conexiones.insertarArco("E", "C", 5);
-        conexiones.insertarArco("C", "E", 5);
-        
-        conexiones.insertarArco("C", "B", 5);
-        conexiones.insertarArco("B", "C", 5);*/
     }
 
     public void cargaTesting2() {

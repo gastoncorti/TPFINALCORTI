@@ -5,12 +5,14 @@ public class Ciudad {
     private String nombre, provincia;
     private int habitantes;
     private boolean alojamientoDisp;
+
     public Ciudad() {
         nombre = "N/A";
         provincia = "N/A";
         habitantes = 0;
         alojamientoDisp = false;
     }
+
     public Ciudad(String nom, String prov, int hab, boolean disp) {
         nombre = nom;
         provincia = prov;
@@ -52,7 +54,12 @@ public class Ciudad {
 
     @Override
     public String toString() {
-        return "Ciudad: " + nombre + " Prov: " + provincia + " Hab: " + habitantes + " Alojamiento: " + ((alojamientoDisp) ? "Si" : "No");
+        String cad;
+        if (this != null) {
+            cad = "Ciudad: " + nombre + " Prov: " + provincia + " Hab: " + habitantes + " Alojamiento: " + ((alojamientoDisp) ? "Si" : "No");
+        } else {
+            cad = "No Existe!";
+        }
+        return cad;
     }
 }
-
