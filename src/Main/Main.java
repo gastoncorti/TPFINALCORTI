@@ -110,7 +110,7 @@ public class Main {
         g.insertarArco("C", "E", 3);
         g.insertarArco("D", "E", 5);
 
-        ListaStr list = g.caminoMenorCantCiudades("A", "E");
+        ListaStr list = g.caminnoMenorCantVertices("A", "E");
 
         System.out.println(list.toString());
 

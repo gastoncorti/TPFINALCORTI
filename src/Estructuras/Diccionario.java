@@ -295,7 +295,7 @@ public class Diccionario {
         raiz = null;
     }
 
-    public String listarCiudadesAlfabeticamente() {
+    public String listarAlfabeticamente() {
         String res = "No existen ciudades!";
         if (raiz != null) {
             res = listarAux(raiz);
@@ -388,7 +388,6 @@ public class Diccionario {
         if (raiz != null) {
             res = toStringAux(raiz);
         }
-
         return res;
     }
 

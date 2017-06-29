@@ -107,39 +107,34 @@ public class ServicioViajero {
 
     }
 
-    /*
-5.  Dadas 2 ciudades A y B, devolver la menor cantidad de kilómetros a realizar para llegar desde A
-    hasta B.
-6.  Dadas 2 ciudades A y B y una cantidad de kilómetros K, verificar si existe algún camino para ir
-    desde A hasta B que no supere K kilómetros en total.
-7.  Dadas 2 ciudades A y B, devolver el camino que pasa por menos ciudades que va desde A hasta
-    B. El camino que debe devolver será una lista de ciudades.
-8.  Dadas 2 ciudades A y B, devolver un camino desde A hasta B que pase sólo por ciudades que
-    tienen alojamiento disponible (excepto A y B).
-     */
     public void caminoMasCortoCantCiudad() {
         String origen = "", destino = "";
         System.out.println("Partida: ");
         origen = TecladoIn.readLine().toUpperCase();
         System.out.println("Destino: ");
         destino = TecladoIn.readLine().toUpperCase();
-        ListaStr camino = conexiones.caminoMenorCantCiudades(origen, destino);
+        ListaStr camino = conexiones.caminnoMenorCantVertices(origen, destino);
         System.out.println(camino.toString());
     }
 
     public void caminoMasCortoKilometros() {
         String origen, destino;
+        double menorDistancia;
         System.out.println("Ingrese origen: ");
         origen = TecladoIn.readLine().toUpperCase();
         System.out.println("Ingrese destino: ");
         destino = TecladoIn.readLine().toUpperCase();
-        //System.out.println("Menor KM: " + conexiones.menorKilometraje(origen, destino));
-        ListaStr camino = conexiones.dijkstra(origen, destino);
-        System.out.println(camino.toString());
+        menorDistancia = conexiones.dijkstramMenorDistancia(origen, destino);
+
+        if (menorDistancia == Integer.MAX_VALUE) {
+            System.out.println("No existe camino entre: " + origen + " y " + destino);
+        } else {
+            System.out.println("La cantidad minima de KM es: " + menorDistancia);
+        }
     }
 
     public void caminoKilometroLimite() {
-        /*double kmMaximo = -1;
+        double kmMaximo = -1;
         String origen, destino;
         System.out.println("Ingrese origen: ");
         origen = TecladoIn.readLine().toUpperCase();
@@ -147,12 +142,12 @@ public class ServicioViajero {
         destino = TecladoIn.readLine().toUpperCase();
         System.out.println("Ingrese kilometraje máximo: ");
         kmMaximo = TecladoIn.readLineDouble();
-        double kmMinimoConseguido = conexiones.menorKilometraje(origen, destino);
-        if (kmMinimoConseguido > kmMaximo) {
+        double kmMinimoConseguido = conexiones.dijkstramMenorDistancia(origen, destino);
+        if (kmMinimoConseguido >= kmMaximo) {
             System.out.println("Lo siento, la distancia es muy corta o no encontre un camino.");
         } else {
             System.out.println("El kilometraje minimo es: " + kmMinimoConseguido + " km.");
-        }*/
+        }
     }
 
     public void caminoConAlojamiento() {
@@ -167,7 +162,7 @@ public class ServicioViajero {
     }
 
     public void listarCiudadesAlfab() {
-        System.out.println(diccionario.listarCiudadesAlfabeticamente());
+        System.out.println(diccionario.listarAlfabeticamente());
     }
 
     public void mostrarDic() {
@@ -292,7 +287,7 @@ public class ServicioViajero {
         conexiones.insertarArco("B", "D", 10);
         conexiones.insertarArco("A", "C", 5);
         conexiones.insertarArco("C", "D", 5);
-        
+
         /*conexiones.insertarArco("A", "B", 6);
         conexiones.insertarArco("B", "A", 6);
 
@@ -313,9 +308,8 @@ public class ServicioViajero {
         
         conexiones.insertarArco("C", "B", 5);
         conexiones.insertarArco("B", "C", 5);*/
-
     }
-    
+
     public void cargaTesting2() {
         diccionario.insertar("NEUQUEN", new Ciudad("NEUQUEN", "NEUQUEN", 500000, true));
         diccionario.insertar("POSADAS", new Ciudad("POSADAS", "MISIONES", 344833, true));

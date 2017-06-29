@@ -214,18 +214,18 @@ public class Grafo {
         }
     }
 
-    public ListaStr caminoMenorCantCiudades(String partida, String llegada) {
+    public ListaStr caminnoMenorCantVertices(String partida, String llegada) {
         ListaStr visitados = new ListaStr();
         ListaStr menor = new ListaStr();
         NodoVert vPartida = ubicarVertice(partida);
         NodoVert vLlegada = ubicarVertice(llegada);
         if (vPartida != null && vLlegada != null) {
-            menor = caminoMenorCantCiudadesAux(vPartida, visitados, menor, llegada);
+            menor = caminoMenorCantVerticesAux(vPartida, visitados, menor, llegada);
         }
         return menor;
     }
 
-    private ListaStr caminoMenorCantCiudadesAux(NodoVert partida, ListaStr visitados, ListaStr menor, String llegada) {
+    private ListaStr caminoMenorCantVerticesAux(NodoVert partida, ListaStr visitados, ListaStr menor, String llegada) {
         NodoAdy aux;
         ListaStr menorAux;
         if (!visitados.pertenece(partida.getElem())) {
@@ -241,7 +241,7 @@ public class Grafo {
             } else {
                 aux = partida.getPrimerAdy();
                 while (aux != null) { // MODIFICACION CUNI
-                    menorAux = caminoMenorCantCiudadesAux(aux.getVertice(), visitados, menor, llegada);
+                    menorAux = caminoMenorCantVerticesAux(aux.getVertice(), visitados, menor, llegada);
                     if (!menorAux.esVacia()) {
                         if (!menor.esVacia()) {
                             if (menorAux.longitud() < menor.longitud()) {
@@ -334,91 +334,13 @@ public class Grafo {
         return cad;
     }
 
-    public int cantVertices() {
-        int cant = 0;
-        NodoVert aux = inicio;
-
-        while (aux != null) {
-            cant++;
-            aux = aux.getSigVertice();
-        }
-
-        return cant;
-    }
-
-    public long distancia(String origen, String destino) {
-        return -1;
-    }
-
-    private double distanciaAux(NodoVert origen, String destino, double distancia, ListaStr visitados) {
-        NodoAdy adyAux = origen.getPrimerAdy();
-        if (origen.getElem().equals(destino)) {
-            //es el elemento
-        } else {
-            while (adyAux != null) {
-
-            }
-        }
-
-        return 1D;
-    }
-
-    public double intentoDisk(String origen, String destino) {
-        NodoVert origenAux = ubicarVertice(origen);
-        NodoVert destinoAux = ubicarVertice(destino);
-
-        return 0.0;
-    }
-
-    private int leastDistance(LinkedList<Double> dist) {
-        double menor;
-        int p = 0;
-
-        for (int i = 0; i < dist.size() - 1; i++) {
-            menor = dist.get(i);
-            if (menor > dist.get(i + 1)) {
-                menor = dist.get(i + 1);
-                p = i + 1;
-            }
-        }
-        return p;
-    }
-
-    private double peso(NodoVert a, NodoAdy b) {
-        NodoAdy auxAdy = a.getPrimerAdy();
-        double peso = -1;
-        while (auxAdy != null && peso == -1) {
-            if (b.getVertice().getElem().equals(auxAdy.getVertice().getElem())) {
-                peso = auxAdy.getEtiqueta();
-            } else {
-                auxAdy = auxAdy.getSigAdyacente();
-            }
-        }
-
-        return peso;
-    }
-
-    private int posArreglo(double[] arr) {
-        double menor;
-        int p = -1;
-        for (int i = 0; i < arr.length - 1; i++) {
-            menor = arr[i];
-            if (menor > arr[i + 1]) {
-                menor = arr[i + 1];
-                p = i + 1;
-            }
-        }
-        return p;
-    }
-
-    public ListaStr dijkstra(String origen, String destino) {
-        ListaStr camino = null, visitados, vertices;
-        ColaStr colaAdy = new ColaStr();
+    public ListaStr dijkstramCamino(String origen, String destino) {
+        ListaStr visitados, vertices = null;
         NodoVert auxVert;
         NodoAdy auxAdy;
         String verticeActual;
-        String[] anterior;
-        double[] distancia;
+        String[] previo = null;
+        double[] distancia = null;
         int cantElementos = 0;
 
         if (this.inicio != null) {//Si el grafo esta vacio, return null
@@ -432,12 +354,12 @@ public class Grafo {
                 auxVert = auxVert.getSigVertice();
                 cantElementos++;
             }
-            
-            anterior = new String[cantElementos];
+
+            previo = new String[cantElementos];
             distancia = new double[cantElementos];
             for (int i = 0; i < cantElementos; i++) {
                 distancia[i] = Integer.MAX_VALUE;
-                anterior[i] = null;
+                previo[i] = null;
             }
 
             int posModificar;
@@ -446,45 +368,93 @@ public class Grafo {
             int posMenor;
             verticeActual = origen; // ORIGEN!!!
             distancia[vertices.getPos(verticeActual)] = 0;
-            anterior[vertices.getPos(verticeActual)] = null;
+            previo[vertices.getPos(verticeActual)] = null;
             while (visitados.longitud() < cantElementos) { //HASTA QUE VERTICEACTUAL SEA NULL ES DECIR NO TENGA MAS PARA ITERAR
                 visitados.insertar(verticeActual, 0);
                 auxAdy = getRefVertice(verticeActual).getPrimerAdy(); //ACA LEVANTO EL VERTICE(NODO) PARA PREGUNTARLE POR SU ADY
-                while (auxAdy != null) {//MIENTRAS ESE ADY NO SEA NULLO
+                while (auxAdy != null) {//MIENTRAS ESE ADY NO SEA NULL
                     if (!visitados.pertenece(auxAdy.getVertice().getElem())) { //ESTA ES LA LISTA DE VISITADOS PARA NO REPETIR
                         posModificar = vertices.getPos(auxAdy.getVertice().getElem()); //GETPOS ME DA EL INDICE PARA SABER CUAL MODIFICAR
                         posDeDondeSaleArco = vertices.getPos(verticeActual); //ACA SE DE CUAL NODO VENGO PARA SUMAR
                         nuevaDistancia = auxAdy.getEtiqueta() + distancia[posDeDondeSaleArco]; //LEVANTO LA NUEVA DISTANCIA
                         if (distancia[posModificar] > nuevaDistancia) {//EL PASO DIJTRAM QUE HACE LA MAGIA
                             distancia[posModificar] = nuevaDistancia;
-                            anterior[posModificar] = verticeActual;
+                            previo[posModificar] = verticeActual;
                         }
-                        colaAdy.poner(auxAdy.getVertice().getElem()); //ACA AGREGO AL ADY ACTUAL PARA SEGUIR USANDO ELEMENTOS DE ACA( PARA QUE NO SEA RANDOM) GRACIAS CUNI :) IDEA TUYA
-                        //auxAdy = auxAdy.getSigAdyacente(); 
-                    }  //SI SE VA AL ELSE SIGNIFICA QUE EL VERTICE ACTUAL YA SE HABIA VISITADO NO HACE FALTA METERTELO EN EL UPITE DIGO LA COLA
+                    }
                     auxAdy = auxAdy.getSigAdyacente();
-
                 }
                 posMenor = 0;
-                for (int i = 0; i < cantElementos; i++) { //Revisar long de lista
-                    if (!visitados.pertenece(vertices.recuperar(i)) && distancia[i] < distancia[posMenor]) {
+                for (int i = 0; i < cantElementos; i++) { // RECUPERO EL MENOR(DISTANCIA) QUE NO FUE VISITADO 
+                    if (distancia[i] < distancia[posMenor] && !visitados.pertenece(vertices.recuperar(i))) {
                         posMenor = i;
                     }
                     verticeActual = vertices.recuperar(posMenor);
-
                 }
-                //visitados.insertar(verticeActual, 0);//inserto el vertice que anote todos sus arcos
-                //verticeActual = colaAdy.sacar();//ACA RECUPERO EL PRIMERO (SE PODRIA USAR COLA DE PRIORIDAD PARA QUE NO SEA GREEDY)
             }
             // DEBUG ONLY
             for (int i = 0; i < distancia.length; i++) {
-                System.out.println("Vert: " + vertices.recuperar(i) + "\tDist: " + distancia[i] + "\tPrev: " + anterior[i]);
+                System.out.println("Vert: " + vertices.recuperar(i) + "\tDist: " + distancia[i] + "\tPrev: " + previo[i]);
             }
-            //DEBUG ONLY
-            camino = armarCaminoDijs(vertices, distancia, anterior, origen, destino);
         }
+        return armarCaminoDijs(vertices, distancia, previo, origen, destino);
+    }
 
-        return camino;
+    public double dijkstramMenorDistancia(String origen, String destino) {
+        ListaStr visitados, vertices = null;
+        NodoVert auxVert;
+        NodoAdy auxAdy;
+        String verticeActual;
+        double[] distancia = null;
+        int cantElementos = 0;
+
+        if (this.inicio != null) {//Si el grafo esta vacio, return null
+            visitados = new ListaStr();
+            vertices = new ListaStr();
+            auxVert = this.inicio;
+
+            while (auxVert != null) {
+                verticeActual = auxVert.getElem();
+                vertices.insertarAlFinal(verticeActual);
+                auxVert = auxVert.getSigVertice();
+                cantElementos++;
+            }
+
+            distancia = new double[cantElementos];
+            for (int i = 0; i < cantElementos; i++) {
+                distancia[i] = Integer.MAX_VALUE;
+            }
+
+            int posModificar;
+            int posDeDondeSaleArco;
+            double nuevaDistancia;
+            int posMenor;
+            verticeActual = origen; // ORIGEN!!!
+            distancia[vertices.getPos(verticeActual)] = 0;
+            while (visitados.longitud() < cantElementos) { //HASTA QUE VERTICEACTUAL SEA NULL ES DECIR NO TENGA MAS PARA ITERAR
+                visitados.insertar(verticeActual, 0);
+                auxAdy = getRefVertice(verticeActual).getPrimerAdy(); //ACA LEVANTO EL VERTICE(NODO) PARA PREGUNTARLE POR SU ADY
+                while (auxAdy != null) {//MIENTRAS ESE ADY NO SEA NULL
+                    if (!visitados.pertenece(auxAdy.getVertice().getElem())) { //ESTA ES LA LISTA DE VISITADOS PARA NO REPETIR
+                        posModificar = vertices.getPos(auxAdy.getVertice().getElem()); //GETPOS ME DA EL INDICE PARA SABER CUAL MODIFICAR
+                        posDeDondeSaleArco = vertices.getPos(verticeActual); //ACA SE DE CUAL NODO VENGO PARA SUMAR
+                        nuevaDistancia = auxAdy.getEtiqueta() + distancia[posDeDondeSaleArco]; //LEVANTO LA NUEVA DISTANCIA
+                        if (distancia[posModificar] > nuevaDistancia) {//EL PASO DIJTRAM QUE HACE LA MAGIA
+                            distancia[posModificar] = nuevaDistancia;
+                        }
+                    }
+                    auxAdy = auxAdy.getSigAdyacente();
+                }
+                posMenor = 0;
+                for (int i = 0; i < cantElementos; i++) { // RECUPERO EL MENOR(DISTANCIA) QUE NO FUE VISITADO 
+                    if (distancia[i] < distancia[posMenor] && !visitados.pertenece(vertices.recuperar(i))) {
+                        posMenor = i;
+                    }
+                    verticeActual = vertices.recuperar(posMenor);
+                }
+            }
+        }
+        return distancia[vertices.getPos(destino)];//armarCaminoDijs(vertices, distancia, previo, origen, destino);
     }
 
     private NodoVert getRefVertice(String elem) {
@@ -506,7 +476,7 @@ public class Grafo {
     private ListaStr armarCaminoDijs(ListaStr vert, double[] dist, String[] anterior, String origen, String destino) {
         ListaStr camino = new ListaStr();
         camino.insertar(destino, 0); // ultimo el destino
-        int pos = -1;
+        int pos;
 
         String vertActual = destino;
         while (!vertActual.equals(origen)) {
