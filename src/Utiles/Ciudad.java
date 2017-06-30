@@ -54,12 +54,6 @@ public class Ciudad {
 
     @Override
     public String toString() {
-        String cad;
-        if (this != null) {
-            cad = "Ciudad: " + nombre + " Prov: " + provincia + " Hab: " + habitantes + " Alojamiento: " + ((alojamientoDisp) ? "Si" : "No");
-        } else {
-            cad = "No Existe!";
-        }
-        return cad;
+        return "Ciudad: " + nombre + " Prov: " + provincia + " Hab: " + habitantes + " Alojamiento: " + ((alojamientoDisp) ? "Si" : "No");
     }
 }

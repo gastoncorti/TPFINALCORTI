@@ -94,7 +94,12 @@ public class ServicioViajero {
         Ciudad ciudad;
         System.out.println("Ingrese ciudad: ");
         ciudad = diccionario.recuperarElemento(TecladoIn.readLineWord().toUpperCase());
-        System.out.println(ciudad.toString());
+        if(ciudad!=null) {
+            System.out.println(ciudad.toString());
+         } else {
+            System.out.println("No encontre la ciudad ingresada.");
+        }
+        
     }
 
     public void listarRangoCiudades() {
@@ -129,7 +134,7 @@ public class ServicioViajero {
         System.out.println("Ingrese destino: ");
         destino = TecladoIn.readLine().toUpperCase();
         menorDistancia = conexiones.dijkstramMenorDistancia(origen, destino);
-
+        //System.out.println(conexiones.dijkstramCamino(origen, destino).toString());
         if (menorDistancia == Integer.MAX_VALUE) {
             System.out.println("No existe camino entre: " + origen + " y " + destino);
         } else {
@@ -148,7 +153,7 @@ public class ServicioViajero {
         System.out.println("Ingrese kilometraje máximo: ");
         kmMaximo = Math.abs(TecladoIn.readLineDouble());
         double kmMinimoConseguido = conexiones.dijkstramMenorDistancia(origen, destino);
-        if (kmMinimoConseguido >= kmMaximo) {
+        if (kmMinimoConseguido > kmMaximo) {
             System.out.println("Lo siento, la distancia es muy corta o no encontre un camino.");
         } else {
             System.out.println("El kilometraje minimo es: " + kmMinimoConseguido + " km.");
@@ -158,9 +163,9 @@ public class ServicioViajero {
     public void caminoConAlojamiento() {
         System.out.println("-CAMINO CON ALOJAMIENTO-\n");
         String origen, destino;
-        System.out.println("Ingrese origen: ");
+        System.out.println("Desde: ");
         origen = TecladoIn.readLine().toUpperCase();
-        System.out.println("Ingrese destino: ");
+        System.out.println("Hasta: ");
         destino = TecladoIn.readLine().toUpperCase();
         ListaStr conAloj = conexiones.caminoConAlojamiento(origen, destino, diccionario);
         System.out.println(conAloj.toString());
@@ -253,7 +258,7 @@ public class ServicioViajero {
         conexiones.insertarArco("AZUL", "CIPOLLETI", 689);
 
         conexiones.insertarArco("CORDOBA", "ROSARIO", 404.6);
-        conexiones.insertarArco("CORDOBA", "AZUL", 531);
+        conexiones.insertarArco("CORDOBA", "AZUL", 363);
 
         conexiones.insertarArco("POSADAS", "RESISTENCIA", 626);
 
