@@ -30,4 +30,10 @@ public class NodoStr {
     public void setEnlace(NodoStr enlace) {
         this.enlace = enlace;
     }
+    
+    //para debug netbeans
+    @Override
+    public String toString() {
+        return this.elem;
+    }
 }

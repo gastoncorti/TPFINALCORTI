@@ -21,7 +21,6 @@ public class Diccionario {
         return esCorrecto;
     }
 
-    //BALANCE = altHijoIZQ - alturaHijoDER
     private boolean insertarAux(String clave, Ciudad nueva, NodoDic raizActual, NodoDic padre) {
         boolean seInserto = false;
         if (!raizActual.getClave().equals(clave)) {
@@ -84,7 +83,6 @@ public class Diccionario {
                         nodoElim.setClave(claveAux);
                         nodoElim.setCiudad(ciudadAux);
                         nodoElim.setAltura(alturaNodo(nodoElim));
-                        //padre.setAltura(alturaNodo(padre));
                         break;
                     case "IZQ":
                         if (padre == null) {
@@ -96,7 +94,6 @@ public class Diccionario {
                             } else {
                                 padre.setDer(nodoElim.getIzq());
                             }
-                            //padre.setAltura(alturaNodo(padre));
                         }
                         break;
                     case "DER":
@@ -109,7 +106,6 @@ public class Diccionario {
                             } else {
                                 padre.setDer(nodoElim.getDer());
                             }
-                            //padre.setAltura(alturaNodo(padre));
                         }
                         break;
                     default:
@@ -201,24 +197,24 @@ public class Diccionario {
         }
     }
 
-    private NodoDic rotacionDerecha(NodoDic nodo) {
-        NodoDic aux = nodo.getIzq();
-        NodoDic aux2 = aux.getDer();
-        aux.setDer(nodo);
-        nodo.setIzq(aux2);
-        nodo.setAltura(alturaNodo(nodo));
-        aux.setAltura(alturaNodo(aux));
-        return aux;
+    private NodoDic rotacionDerecha(NodoDic pivote) {
+        NodoDic hIzq = pivote.getIzq();
+        NodoDic aux = hIzq.getDer();
+        hIzq.setDer(pivote);
+        pivote.setIzq(aux);
+        pivote.setAltura(alturaNodo(pivote));
+        hIzq.setAltura(alturaNodo(hIzq));
+        return hIzq;
     }
 
-    private NodoDic rotacionIzquierda(NodoDic nodo) {
-        NodoDic aux = nodo.getDer();
-        NodoDic aux2 = aux.getIzq();
-        aux.setIzq(nodo);
-        nodo.setDer(aux2);
-        nodo.setAltura(alturaNodo(nodo));
-        aux.setAltura(alturaNodo(aux));
-        return aux;
+    private NodoDic rotacionIzquierda(NodoDic pivote) {
+        NodoDic hDer = pivote.getDer();
+        NodoDic aux = hDer.getIzq();
+        hDer.setIzq(pivote);
+        pivote.setDer(aux);
+        pivote.setAltura(alturaNodo(pivote));
+        hDer.setAltura(alturaNodo(hDer));
+        return hDer;
     }
 
     private int balance(NodoDic raizActual) {
@@ -287,10 +283,6 @@ public class Diccionario {
         return alt;
     }
 
-    public int nivel(int elem) {
-        return 0;
-    }
-
     public void vaciar() {
         raiz = null;
     }
@@ -315,7 +307,7 @@ public class Diccionario {
         return res;
     }
 
-    public void listarAltura() {
+    /*public void listarAltura() {
         if (raiz != null) {
             listarAlturaAux(raiz);
             System.out.print("\n");
@@ -355,7 +347,7 @@ public class Diccionario {
             }
 
         }
-    }
+    }*/
 
     public ListaStr listarClavesRango(String inicio, String fin) {
         ListaStr lista = new ListaStr();

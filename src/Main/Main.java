@@ -1,10 +1,40 @@
 package Main;
+import Estructuras.Diccionario;
+import Estructuras.Grafo;
+import Utiles.Ciudad;
 import Utiles.TecladoIn;
 
 public class Main {
 
     public static void main(String[] args) {
-        int opcion;
+        
+        Grafo g = new Grafo();
+        
+        g.insertarVertice("D");
+        g.insertarVertice("B");
+        g.insertarVertice("C");
+        g.insertarVertice("A");
+        g.insertarVertice("E");
+        
+        g.insertarArco("A", "B", 5);
+        g.insertarArco("A", "C", 5);
+        
+        g.insertarArco("E", "A", 5);
+        g.insertarArco("E", "B", 5);
+        
+        g.insertarArco("C", "E", 5);
+        
+        g.insertarArco("E", "D", 5);
+        g.insertarArco("B", "D", 5);
+        
+        System.out.println(g.listarAnchura().toString());
+        
+        
+        /*System.out.println("A A:" + "A".compareTo("A"));
+        System.out.println("A B:" + "A".compareTo("B"));
+        System.out.println("B A:" + "B".compareTo("A"));*/
+        
+       /* int opcion;
         boolean corriendo = true;
         ServicioViajero sv = new ServicioViajero();
         //sv.cargaTesting1();
@@ -66,6 +96,6 @@ public class Main {
                     System.out.println("Existian MUCHAS opciones, no seleccionaste ninguna :( ¡SHAME!");
                     break;
             }
-        }
+        }*/
     }
 }

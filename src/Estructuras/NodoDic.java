@@ -55,4 +55,9 @@ public class NodoDic {
         this.ciudad = ciudad;
     }
  
+    //para el debug netbeans
+    @Override
+    public String toString() {
+        return "Clave: " + this.clave + " altura: "+ this.altura + " HI: "+ this.izq.clave + " HD: " + this.der.clave;
+    }
 }

@@ -1,7 +1,5 @@
 package Estructuras;
 
-import java.util.LinkedList;
-
 public class Grafo {
 
     private NodoVert inicio;
@@ -11,13 +9,8 @@ public class Grafo {
     }
 
     public boolean insertarVertice(String elem) {
-        boolean seInserto = false;
-        NodoVert aux = ubicarVertice(elem);
-        if (aux == null) {
-            this.inicio = new NodoVert(elem, this.inicio);
-            seInserto = true;
-        }
-        return seInserto;
+        this.inicio = new NodoVert(elem, this.inicio);
+        return true;
     }
 
     private NodoVert ubicarVertice(String buscado) {
@@ -29,21 +22,30 @@ public class Grafo {
     }
 
     public boolean insertarArco(String origen, String destino, double etiqueta) {
-        boolean seInserto = false;
-        NodoVert o = ubicarVertice(origen);
-        if (o != null) {
-            NodoVert d = ubicarVertice(destino);
-            if (d != null) {
-                NodoAdy aux = o.getPrimerAdy();
-                if (aux != null) {
-                    while (aux.getSigAdyacente() != null) {
-                        aux = aux.getSigAdyacente();
+        boolean seInserto = true;
+        boolean noExisteArco = true;
+        NodoVert vertOrigen = ubicarVertice(origen);
+        if (vertOrigen != null) {
+            NodoVert vertDestino = ubicarVertice(destino);
+            if (vertDestino != null) {
+                NodoAdy adyActual = vertOrigen.getPrimerAdy();
+                if (adyActual != null) {
+                    if (!adyActual.getVertice().getElem().equals(destino)) {
+                        while (adyActual.getSigAdyacente() != null && noExisteArco) {
+                            adyActual = adyActual.getSigAdyacente();
+                        }
+                    } else {
+                        noExisteArco = false;
                     }
-                    aux.setSigAdyacente(new NodoAdy(d, etiqueta, null));
+
+                    if (noExisteArco) {
+                        adyActual.setSigAdyacente(new NodoAdy(vertDestino, etiqueta, null));
+                    } else {
+                        seInserto = false;
+                    }
                 } else {
-                    o.setPrimerAdy(new NodoAdy(d, etiqueta, null));
+                    vertOrigen.setPrimerAdy(new NodoAdy(vertDestino, etiqueta, null));
                 }
-                seInserto = true;
             }
         }
 
@@ -154,13 +156,11 @@ public class Grafo {
 
     public boolean existeCamino(String origen, String destino) {
         boolean existe = false;
+        NodoVert vertOrigen = ubicarVertice(origen);
+        NodoVert vertDestino = ubicarVertice(destino);
 
-        NodoVert o = ubicarVertice(origen);
-        NodoVert d = ubicarVertice(destino);
-
-        if (o != null && d != null) {
-            ListaStr visitados = new ListaStr();
-            existe = existeCaminoAux(o, destino, visitados);
+        if (vertOrigen != null && vertDestino != null) {
+            existe = existeCaminoAux(vertOrigen, destino, new ListaStr());
         }
 
         return existe;
@@ -172,13 +172,13 @@ public class Grafo {
             if (origen.getElem().equals(destino)) {
                 existe = true;
             } else {
-                visitados.insertarAlFinal(origen.getElem());
-                NodoAdy ady = origen.getPrimerAdy();
-                while (!existe && ady != null) {
-                    if (!visitados.pertenece(ady.getVertice().getElem())) {
-                        existe = existeCaminoAux(ady.getVertice(), destino, visitados);
+                visitados.insertar(origen.getElem(), 0);
+                NodoAdy adyActual = origen.getPrimerAdy();
+                while (!existe && adyActual != null) {
+                    if (!visitados.pertenece(adyActual.getVertice().getElem())) {
+                        existe = existeCaminoAux(adyActual.getVertice(), destino, visitados);
                     }
-                    ady = ady.getSigAdyacente();
+                    adyActual = adyActual.getSigAdyacente();
                 }
             }
         }
@@ -203,7 +203,7 @@ public class Grafo {
         cola.poner(inicial.getElem());
         while (!cola.esVacia()) {
             NodoVert auxVert = new NodoVert(cola.sacar());
-            visitados.insertarAlFinal(auxVert.getElem());
+            visitados.insertar(auxVert.getElem(), 0);
             NodoAdy auxAdy = auxVert.getPrimerAdy();
             while (auxAdy != null) {
                 if (!visitados.pertenece(auxVert.getElem())) {
@@ -259,6 +259,39 @@ public class Grafo {
         return menor;
     }
 
+    /*PRUEBA BFS*/
+    public ListaStr BFS(String partida, String llegada) {
+        ListaStr visitados = new ListaStr();
+        ListaStr menor = new ListaStr();
+        ColaStr cola = new ColaStr();
+
+        NodoVert vPartida = ubicarVertice(partida);
+        NodoVert vLlegada = ubicarVertice(llegada);
+
+        if (vPartida != null && vLlegada != null) {
+            NodoVert vertActual = this.inicio;
+            while (vertActual != null) {
+                if (!visitados.pertenece(vertActual.getElem())) {
+                    cola.poner(vertActual.getElem());
+                    while (!cola.esVacia()) {
+                        NodoVert auxVert = new NodoVert(cola.sacar());
+                        visitados.insertar(auxVert.getElem(), 0);
+                        NodoAdy auxAdy = auxVert.getPrimerAdy();
+                        while (auxAdy != null) {
+                            if (!visitados.pertenece(auxVert.getElem())) {
+                                cola.poner(auxVert.getElem());
+                            }
+                            auxAdy = auxAdy.getSigAdyacente();
+                        }
+                    }
+                }
+                vertActual = vertActual.getSigVertice();
+            }
+        }
+        return menor;
+    }
+
+    /*FIN PRUEBA*/
     public ListaStr caminoConAlojamiento(String partida, String llegada, Diccionario dicc) {
         ListaStr visitados = new ListaStr();
         ListaStr menor = new ListaStr();
@@ -273,7 +306,7 @@ public class Grafo {
     private ListaStr caminoConAlojamientoAux(NodoVert partida, ListaStr visitados, ListaStr menor, String llegada, Diccionario dicc) {
         NodoAdy auxAdy;
         ListaStr menorAux;
-        boolean alojActual = false;
+        boolean alojActual;
         if (!visitados.pertenece(partida.getElem())) {
             visitados.insertarAlFinal(partida.getElem());
             if (partida.getElem().equals(llegada)) {
@@ -310,24 +343,23 @@ public class Grafo {
 
     @Override
     public String toString() {
-        String cad = "";
+        String cad = "----------------GRAFO-------------------\n";
         NodoVert auxVert = inicio;
         NodoAdy auxAdy;
         if (auxVert != null) {
             while (auxVert != null) {
-                cad = cad + "\n----------------------------------------"
-                        + "\n Ciudad: " + auxVert.getElem();
                 auxAdy = auxVert.getPrimerAdy();
                 if (auxAdy != null) {
                     while (auxAdy != null) {
-                        cad = cad + "\n conectado con: " + auxAdy.getVertice().getElem() + " a: " + auxAdy.getEtiqueta() + " km de distancia.";
+                        cad += auxVert.getElem() + " -- " + auxAdy.getEtiqueta() + " -- " + auxAdy.getVertice().getElem() + "\n";
                         auxAdy = auxAdy.getSigAdyacente();
                     }
                 } else {
-                    cad = cad + "\n Sin rutas!";
+                    cad += auxVert.getElem() + " Sin Arcos\n";
                 }
                 auxVert = auxVert.getSigVertice();
             }
+            cad += "----------------------------------------\n";
         } else {
             cad = "Vacio!";
         }
