@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
         
-        Grafo g = new Grafo();
+        /*Grafo g = new Grafo();
         
         g.insertarVertice("D");
         g.insertarVertice("B");
@@ -27,14 +27,14 @@ public class Main {
         g.insertarArco("E", "D", 5);
         g.insertarArco("B", "D", 5);
         
-        System.out.println(g.listarAnchura().toString());
+        System.out.println(g.listarAnchura().toString());*/
         
         
         /*System.out.println("A A:" + "A".compareTo("A"));
         System.out.println("A B:" + "A".compareTo("B"));
         System.out.println("B A:" + "B".compareTo("A"));*/
         
-       /* int opcion;
+        int opcion;
         boolean corriendo = true;
         ServicioViajero sv = new ServicioViajero();
         //sv.cargaTesting1();
@@ -96,6 +96,6 @@ public class Main {
                     System.out.println("Existian MUCHAS opciones, no seleccionaste ninguna :( ¡SHAME!");
                     break;
             }
-        }*/
+        }
     }
 }

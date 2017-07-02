@@ -288,7 +288,7 @@ public class Diccionario {
     }
 
     public String listarAlfabeticamente() {
-        String res = "No existen ciudades!";
+        String res = "";
         if (raiz != null) {
             res = listarAux(raiz);
         }
@@ -300,11 +300,11 @@ public class Diccionario {
         String res = "";
         if (nActual != null) {
             res += listarAux(nActual.getIzq());
-            res += nActual.getCiudad().getNombre() + ",";
+            res += " " + nActual.getCiudad().getNombre();
             res += listarAux(nActual.getDer());
         }
 
-        return res;
+        return res.trim();
     }
 
     /*public void listarAltura() {
@@ -386,7 +386,7 @@ public class Diccionario {
     private String toStringAux(NodoDic raizActual) {
         String res = "";
         if (raizActual != null) {
-            res += "Padre: " + raizActual.getClave();
+            res += raizActual.getClave();
             if (raizActual.getIzq() != null) {
                 res += "\n HI: " + raizActual.getIzq().getClave();
             }
